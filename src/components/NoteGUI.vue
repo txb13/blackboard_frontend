@@ -34,7 +34,7 @@ export default defineComponent({
   </div>
 
   <form @submit.prevent="onFormSubmitted">
-    <textarea type="text" placeholder="Schreibe deine Notiz hier"
+    <textarea placeholder="Schreibe deine Notiz hier"
                rows="3" v-model="nameField" />
     <button>Notiz hinzufügen</button>
   </form>
@@ -48,7 +48,7 @@ export default defineComponent({
       </tr>
       <tr v-for="note in notes" :key="note.id" class="note">
         <td><button @click="removeNote(note.id)">X</button></td>
-        <td>{{ note.name }}</td>
+        <td class="noteContainer ">{{ note.name }}</td>
 
       </tr>
     </tbody>
@@ -58,17 +58,6 @@ export default defineComponent({
 </template>
 
 <style scoped>
-.note  {
-padding: 3rem;
-  margin-bottom: 1rem;
-  background-color: #333;
-  }
-.container{
-border-color: #fff;
-width: 100%;
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 2rem;
-  border-radius: 8px;
-}
+
+
 </style>
