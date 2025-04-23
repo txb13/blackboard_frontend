@@ -20,7 +20,10 @@ import { RouterLink, RouterView } from 'vue-router'
             <RouterLink to="/" class="nav-link" >Home</RouterLink>
           </li>
           <li class="nav-item">
-            <RouterLink to="/About" class="nav-link" >About</RouterLink>
+            <RouterLink to="/about" class="nav-link" >About</RouterLink>
+          </li>
+          <li class="nav-item">
+            <RouterLink to="/note" class="nav-link" >Note</RouterLink>
           </li>
         </ul>
       </div>
