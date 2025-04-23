@@ -1,63 +1,94 @@
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+
+import { ref } from 'vue'
+import { VueFlow } from '@vue-flow/core'
+import { Background } from '@vue-flow/background'
+import useDragAndDrop from '../useDnD'
+import DropzoneBackground from './DropzoneBackground.vue'
+
 
 type Note = { id: number; name: string }
-type Data = { notes: Note[]; nameField: string; currentId: number }
 
-export default defineComponent({
-  name: 'NotesList',
-  props: { msg: { type: String, required: true } },
+const notes     = ref<Note[]>([])
+const nameField = ref('')
+const nextId    = ref(1)
 
-  data(): Data {
-    return { nameField: '', currentId: 1, notes: [] }
-  },
+function addNote() {
+  if (!nameField.value.trim()) return
+  notes.value.push({ id: nextId.value++, name: nameField.value.trim() })
+  nameField.value = ''
+}
 
-  methods: {
-    addNote(name: string) {
-      this.notes.push({ id: this.currentId++, name })
-      this.nameField = ''
-    },
-    onFormSubmitted() {
-      if (this.nameField.trim()) this.addNote(this.nameField.trim())
-    },
-    removeNote(id: number) {
-      this.notes = this.notes.filter(n => n.id !== id)
-    },
-  },
-})
+function removeNote(id: number) {
+  notes.value = notes.value.filter(n => n.id !== id)
+}
+
+const {
+  onDragStart,
+  onDragOver,
+  onDragLeave,
+  onDrop,
+  isDragOver,
+} = useDragAndDrop()
 </script>
 
 <template>
-  <div class="greetings">
-    <h1 class="green">{{ msg }}</h1>
-    <h3>Erstelle hier Notizen auf unserem Digitalen Blackboard</h3>
-  </div>
 
-  <form @submit.prevent="onFormSubmitted">
-    <textarea placeholder="Schreibe deine Notiz hier"
-               rows="3" v-model="nameField" />
+  <h1>Erstelle hier Notizen auf unserem digitalen Blackboard</h1>
+
+  <form @submit.prevent="addNote">
+    <textarea
+      v-model="nameField"
+      rows="3"
+      placeholder="Schreibe deine Notiz hier …"
+    />
     <button>Notiz hinzufügen</button>
   </form>
 
-
-<div class="container">
-  <table>
+  <table class="nodes">
     <tbody>
-      <tr v-if="!notes.length">
-        <td colspan="3"> Noch keine Notizen!</td>
-      </tr>
-      <tr v-for="note in notes" :key="note.id" class="note">
-        <td><button @click="removeNote(note.id)">X</button></td>
-        <td class="noteContainer ">{{ note.name }}</td>
+    <tr v-if="!notes.length">
+      <td colspan="2">Noch keine Notizen!</td>
+    </tr>
 
-      </tr>
+    <tr v-for="note in notes" :key="note.id">
+      <td><button @click="removeNote(note.id)">X</button></td>
+      <td>
+        <div class="vue-flow__node-input" :draggable="true"  @dragstart="onDragStart($event, { type: 'input', label: note.name })"  >{{note.name}}</div>
+
+      </td>
+    </tr>
     </tbody>
   </table>
-</div>
 
+  <div class="canvas">
+    <VueFlow
+      class="board"
+      @dragover.prevent="onDragOver"
+      @dragleave="onDragLeave"
+      @drop="onDrop"
+    >
+      <Background gap="20" pattern-color="#c0c0c0" />
+
+      <DropzoneBackground
+        :style="{
+          backgroundColor: isDragOver ? '#e7f3ff' : 'transparent',
+          transition: 'background-color .2s ease',
+        }"
+      >
+        <p v-if="isDragOver">Hier ablegen</p>
+      </DropzoneBackground>
+    </VueFlow>
+  </div>
 </template>
 
 <style scoped>
 
 
+.canvas  { height: 600px; border: 1px solid #ddd; margin-top: 1rem; }
+.board   { height: 100%; }
+textarea { width: 100%; }
+
+.draggable-note { cursor: grab; }
+.draggable-note:active { cursor: grabbing; }
 </style>

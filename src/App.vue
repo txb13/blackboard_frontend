@@ -20,6 +20,8 @@ import NoteGUI from './components/NoteGUI.vue'
   </header>
 
   <RouterView />
+
+
 </template>
 
 <style scoped>

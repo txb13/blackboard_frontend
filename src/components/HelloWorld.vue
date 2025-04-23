@@ -11,6 +11,8 @@ defineProps<{
      Erstellen und verwalten von Notizen
     </h3>
   </div>
+
+
 </template>
 
 <style scoped>
