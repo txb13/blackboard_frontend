@@ -4,7 +4,6 @@ import { ref } from 'vue'
 import { VueFlow } from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
 import useDragAndDrop from '../useDnD'
-import DropzoneBackground from './DropzoneBackground.vue'
 
 
 type Note = { id: number; name: string }
@@ -33,52 +32,66 @@ const {
 </script>
 
 <template>
+  <div class="container-fluid">
+    <h2>Erstelle hier Notizen auf unserem digitalen Blackboard</h2>
+    <form @submit.prevent="addNote">
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <input class="form-control" placeholder="Titel">
+        </div>
+        <div class="form-group col-md-6">
+          <input class="form-control" placeholder="Autor">
+        </div>
+      </div>
+      <div class="form-group">
+      <textarea class="form-control"
+                v-model="nameField"
+                placeholder="Schreibe deine Notiz hier …"
+                rows="3">
+      </textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Notiz hinzufügen</button>
+    </form>
 
-  <h1>Erstelle hier Notizen auf unserem digitalen Blackboard</h1>
+    <table class="nodes">
+      <tbody>
+      <tr v-if="!notes.length">
+        <td colspan="2">Noch keine Notizen!</td>
+      </tr>
 
-  <form @submit.prevent="addNote">
-    <textarea
-      v-model="nameField"
-      rows="3"
-      placeholder="Schreibe deine Notiz hier …"
-    />
-    <button>Notiz hinzufügen</button>
-  </form>
+      <tr v-for="note in notes" :key="note.id">
+        <td><button @click="removeNote(note.id)">X</button></td>
+        <td>
+          <div class="vue-flow__node-input" :draggable="true"  @dragstart="onDragStart($event, { type: 'input', label: note.name })"  >{{note.name}}</div>
 
-  <table class="nodes">
-    <tbody>
-    <tr v-if="!notes.length">
-      <td colspan="2">Noch keine Notizen!</td>
-    </tr>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
 
-    <tr v-for="note in notes" :key="note.id">
-      <td><button @click="removeNote(note.id)">X</button></td>
-      <td>
-        <div class="vue-flow__node-input" :draggable="true"  @dragstart="onDragStart($event, { type: 'input', label: note.name })"  >{{note.name}}</div>
-
-      </td>
-    </tr>
-    </tbody>
-  </table>
-
+<div class="container-fluid">
   <div class="canvas">
     <VueFlow
-      class="board"
-      @dragover.prevent="onDragOver"
-      @dragleave="onDragLeave"
-      @drop="onDrop"
+        class="board"
+        @dragover.prevent="onDragOver"
+        @dragleave="onDragLeave"
+        @drop="onDrop"
+        :nodes="nodes"
     >
-      <Background gap="20" pattern-color="#c0c0c0" />
+      <Background gap="20" pattern-color="#c0c0c0"/>
 
-      <DropzoneBackground
-        :style="{
-          backgroundColor: isDragOver ? '#e7f3ff' : 'transparent',
-          transition: 'background-color .2s ease',
-        }"
-      >
-        <p v-if="isDragOver">Hier ablegen</p>
-      </DropzoneBackground>
+<!--      <DropzoneBackground-->
+<!--          :style="{-->
+<!--          backgroundColor: isDragOver ? '#0b59ac' : 'transparent',-->
+<!--          transition: 'background-color .2s ease',-->
+<!--        }"-->
+<!--      >-->
+<!--        <p v-if="isDragOver">Hier ablegen</p>-->
+<!--      </DropzoneBackground>-->
     </VueFlow>
   </div>
+</div>
+
 </template>
 
