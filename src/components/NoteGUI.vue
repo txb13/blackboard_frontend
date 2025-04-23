@@ -82,13 +82,3 @@ const {
   </div>
 </template>
 
-<style scoped>
-
-
-.canvas  { height: 600px; border: 1px solid #ddd; margin-top: 1rem; }
-.board   { height: 100%; }
-textarea { width: 100%; }
-
-.draggable-note { cursor: grab; }
-.draggable-note:active { cursor: grabbing; }
-</style>
