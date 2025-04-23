@@ -5,16 +5,62 @@ import { VueFlow } from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
 import useDragAndDrop from '../useDnD'
 
+type Note2 = {
+  title: string;
+  content: string;
+  author: string;
+  id: number;
+  color: string | null;
+  creationDate: string | null;
+  terminationDate: string | null;
+  xPosition: number;
+  yPosition: number;
+  width: number;
+  height: number;
+}
 
-type Note = { id: number; name: string }
+type Note = { id: number; text: string }
 
-const notes     = ref<Note[]>([])
+
+const notes = ref<Note[]>([])
+
+
+import NoteService from '../services/NoteService.ts'
+
+
+
+const noteService = new NoteService()
+
+const nodes = ref([
+  {
+    id: '1',
+    type: 'input',
+    position: { x: 250, y: 5 },
+    data: { label: 'Node 1' },
+  }
+])
+
+noteService.getNotes().then((notes2: Note2[]) => {
+  let id = 0;
+  for (const note of notes2) {
+    nodes.value.push({
+      id: String(id),
+      type: 'input',
+      position: { x: note.xPosition, y: note.yPosition },
+      data: { label: note.title },
+    })
+    id++
+  }
+  console.log(nodes.value)
+})
+
+
 const nameField = ref('')
 const nextId    = ref(1)
 
 function addNote() {
   if (!nameField.value.trim()) return
-  notes.value.push({ id: nextId.value++, name: nameField.value.trim() })
+  notes.value.push({ id: nextId.value++, text: nameField.value.trim() })
   nameField.value = ''
 }
 
@@ -29,6 +75,7 @@ const {
   onDrop,
   isDragOver,
 } = useDragAndDrop()
+
 </script>
 
 <template>
@@ -62,7 +109,7 @@ const {
       <tr v-for="note in notes" :key="note.id">
         <td><button @click="removeNote(note.id)">X</button></td>
         <td>
-          <div class="vue-flow__node-input" :draggable="true"  @dragstart="onDragStart($event, { type: 'input', label: note.name })"  >{{note.name}}</div>
+          <div class="vue-flow__node-input" :draggable="true"  @dragstart="onDragStart($event, { type: 'input', label: note.text })"  >{{ note.text }}</div>
 
         </td>
       </tr>
@@ -78,20 +125,19 @@ const {
         @dragleave="onDragLeave"
         @drop="onDrop"
         :nodes="nodes"
+        :pan-on-drag="false"
+        :pan-on-scroll="false"
+        :nodes-draggable="true"
+        :nodes-connectable="false"
+        :auto-pan-on-node-drag="false"
+        :min-zoom="1"
     >
-      <Background gap="20" pattern-color="#c0c0c0"/>
-
-<!--      <DropzoneBackground-->
-<!--          :style="{-->
-<!--          backgroundColor: isDragOver ? '#0b59ac' : 'transparent',-->
-<!--          transition: 'background-color .2s ease',-->
-<!--        }"-->
-<!--      >-->
-<!--        <p v-if="isDragOver">Hier ablegen</p>-->
-<!--      </DropzoneBackground>-->
+      <Background
+          gap="10"
+          pattern-color="#c0c0c0"
+          bgColor="#f6ab67"/>
     </VueFlow>
   </div>
 </div>
 
 </template>
-
