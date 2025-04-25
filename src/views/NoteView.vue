@@ -29,6 +29,14 @@ const nodes = ref<CustomNode[]>([
       creationDate: new Date().toLocaleDateString()},
     type: 'custom',
     position: { x: 50, y: 50 } },
+  { id: '2',
+    data: {
+      title: 'Example',
+      author: 'Felix' ,
+      content: 'On top of the default node types mentioned earlier, you can create as many custom node-types as you need.',
+      creationDate: new Date().toLocaleDateString()},
+    type: 'custom',
+    position: { x: 50, y: 50 } }
 ])
 </script>
 
