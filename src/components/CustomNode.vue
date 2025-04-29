@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { Handle, type NodeProps, Position } from '@vue-flow/core'
-import { CustomData, CustomEvents } from './nodes'
+import { type NodeProps } from '@vue-flow/core'
+//import { CustomData, CustomEvents } from './nodes'
 
 const props = defineProps<NodeProps<CustomData, CustomEvents>>()
 </script>
 
 <template>
+  <img src="../assets/pin.svg"  alt="pin" class="pin"/>
   <div class="custom-node">
-    <Handle type="target" :position="Position.Top" />
     <div class="card">
       <div class="card-header">
         {{ props.data.title }}
@@ -35,5 +35,12 @@ const props = defineProps<NodeProps<CustomData, CustomEvents>>()
   border: 1px solid #ccc;
   background: white;
   border-radius: 4px;
+}
+.pin {
+  width: 70px;
+  top: 0;
+  transform: translate(50%, 30%);
+  padding: 0;
+  margin: 0
 }
 </style>
