@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { type NodeProps } from '@vue-flow/core'
+import type {CustomData, CustomEvents} from "@/views/NoteView.vue";
 //import { CustomData, CustomEvents } from './nodes'
 
 const props = defineProps<NodeProps<CustomData, CustomEvents>>()
@@ -33,7 +34,7 @@ const props = defineProps<NodeProps<CustomData, CustomEvents>>()
 .custom-node {
   padding: 10px;
   border: 1px solid #ccc;
-  background: white;
+  background: v-bind('props.data.color');
   border-radius: 4px;
 }
 .pin {
