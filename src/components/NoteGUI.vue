@@ -55,8 +55,7 @@ const nextId    = ref(1)
 
 function addNote() {
   if (!nameField.value.trim()) return
-  // notes.value.push({ id: nextId.value++, text: nameField.value.trim() })
-  // nameField.value = ''
+  notes.value.push({ id: nextId.value++, text: nameField.value.trim() })
   noteService.addNote({
     id: 100,
     title: "Test Title",
@@ -71,6 +70,7 @@ function addNote() {
     height: 100
   });
   noteService.getNotes()
+  nameField.value = ''
 }
 
 function removeNote(id: number) {
