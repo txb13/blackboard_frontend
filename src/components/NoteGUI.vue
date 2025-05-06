@@ -4,6 +4,7 @@ import { ref } from 'vue'
 import { VueFlow } from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
 import useDragAndDrop from '../useDnD'
+import NoteService from '../services/NoteService.ts'
 
 type Note2 = {
   title: string;
@@ -21,13 +22,7 @@ type Note2 = {
 
 type Note = { id: number; text: string }
 
-
 const notes = ref<Note[]>([])
-
-
-import NoteService from '../services/NoteService.ts'
-
-
 
 const noteService = new NoteService()
 
@@ -60,8 +55,22 @@ const nextId    = ref(1)
 
 function addNote() {
   if (!nameField.value.trim()) return
-  notes.value.push({ id: nextId.value++, text: nameField.value.trim() })
-  nameField.value = ''
+  // notes.value.push({ id: nextId.value++, text: nameField.value.trim() })
+  // nameField.value = ''
+  noteService.addNote({
+    id: 100,
+    title: "Test Title",
+    content: nameField.value,
+    author: "Me",
+    color: null,
+    creationDate: null,
+    terminationDate: null,
+    xPosition: 0,
+    yPosition: 0,
+    width: 100,
+    height: 100
+  });
+  noteService.getNotes()
 }
 
 function removeNote(id: number) {
