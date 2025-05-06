@@ -25,4 +25,12 @@ export default class NoteService {
                 return notes;
             });
     }
+    addNote(note: Note): Promise<void> {
+        return axios
+            .post('http://localhost:8080/notes', note)
+            .then(() => {
+                console.log("SET note:", note);
+            });
+    }
+
 }
