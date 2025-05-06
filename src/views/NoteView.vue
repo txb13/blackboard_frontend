@@ -10,7 +10,8 @@ export interface CustomData {
   title: string,
   author: string,
   content: string,
-  creationDate: string
+  creationDate: string,
+  color: string
 }
 
 export interface CustomEvents {
@@ -26,7 +27,8 @@ const nodes = ref<CustomNode[]>([
       title: 'Example',
       author: 'Felix' ,
       content: 'On top of the default node types mentioned earlier, you can create as many custom node-types as you need.',
-      creationDate: new Date().toLocaleDateString()},
+      creationDate: new Date().toLocaleDateString(),
+      color: "#c61111"},
     type: 'custom',
     position: { x: 50, y: 50 } },
   { id: '2',
