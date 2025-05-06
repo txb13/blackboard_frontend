@@ -16,6 +16,8 @@ interface Note {
 
 
 export default class NoteService {
+    // TODO: add deleteNote() for removing notes
+    // TODO: add updateNote() for changing notes
     getNotes(): Promise<Note[]> {
         return axios
             .get('http://localhost:8080/notes')

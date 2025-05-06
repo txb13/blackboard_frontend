@@ -6,7 +6,15 @@ import type {CustomData, CustomEvents} from "@/views/NoteView.vue";
 const props = defineProps<NodeProps<CustomData, CustomEvents>>()
 </script>
 
+
 <template>
+<!--
+  TODO: finish layout of CustomNode:
+    - it needs to feature all attributes
+    - width and height need to get dimensions from note
+    - color needs to adjust
+    - showcase if a note is terminated (for example grey it out)
+-->
   <img src="../assets/pin.svg"  alt="pin" class="pin"/>
   <div class="custom-node">
     <div class="card">
@@ -23,14 +31,12 @@ const props = defineProps<NodeProps<CustomData, CustomEvents>>()
     <div></div>
     <div></div>
   </div>
-
-
-
-
-
 </template>
 
 <style scoped>
+/*
+  TODO: finish style and move it to main.css
+*/
 .custom-node {
   padding: 10px;
   border: 1px solid #ccc;

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+//TODO: this page just exists to help styling notes, it needs to be removed when the styling is done
 import { ref } from 'vue'
 import type { Node } from '@vue-flow/core'
 import { VueFlow } from '@vue-flow/core'
@@ -6,6 +7,22 @@ import { VueFlow } from '@vue-flow/core'
 import CustomNode from '../components/CustomNode.vue'
 // import SpecialNode from '../components/SpecialNode.vue'
 
+//TODO: move CustomData, CustomEvents, etc. to CustomNode.vue
+/*
+  TODO: CustomData needs to hold all values existing in backend:
+    see Note.java in backend:
+      private int id = 0;
+      private String title;
+      private String content;
+      private String author;
+      private String color;
+      private Date creationDate;
+      private Date terminationDate;
+      private int xPosition;
+      private int yPosition;
+      private int width;
+      private int height;
+ */
 export interface CustomData {
   title: string,
   author: string,
@@ -20,6 +37,7 @@ export interface CustomEvents {
 
 type CustomNodeTypes = 'custom' | 'special'
 type CustomNode = Node<CustomData, CustomEvents, CustomNodeTypes>
+
 
 const nodes = ref<CustomNode[]>([
   { id: '1',

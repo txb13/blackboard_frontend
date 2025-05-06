@@ -1,11 +1,16 @@
 <script setup lang="ts">
 
+/*TODO: change notes to have our custom design and attributes (see: CustomNode '../components/CustomNode.vue')
+    import CustomNode from '../components/CustomNode.vue'
+ */
+
 import { ref } from 'vue'
 import { VueFlow } from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
 import useDragAndDrop from '../useDnD'
 import NoteService from '../services/NoteService.ts'
 
+//TODO: Fully implement Note2, remove Note and adjust code
 type Note2 = {
   title: string;
   content: string;
@@ -53,6 +58,7 @@ noteService.getNotes().then((notes2: Note2[]) => {
 const nameField = ref('')
 const nextId    = ref(1)
 
+//TODO: refresh site after running addNote so created notes appear automatically after posting to backend
 function addNote() {
   if (!nameField.value.trim()) return
   notes.value.push({ id: nextId.value++, text: nameField.value.trim() })
@@ -73,6 +79,9 @@ function addNote() {
   nameField.value = ''
 }
 
+/* TODO: Notes need to to be removed by clicking an "X", they should also be removed from backend
+     currently they are only removed from the drag and drop list but remain on the board
+ */
 function removeNote(id: number) {
   notes.value = notes.value.filter(n => n.id !== id)
 }
@@ -88,6 +97,10 @@ const {
 </script>
 
 <template>
+<!--  TODO: Instead of using a form, a button has to "spawn" a Note on the board,
+       the screens zooms into it and the user can add title, author, etc.
+       it could also be possible to integrate the form into the note itself
+       and disappear after clicking a button-->
   <div class="container-fluid">
     <h2>Erstelle hier Notizen auf unserem digitalen Blackboard</h2>
     <form @submit.prevent="addNote">
@@ -108,7 +121,7 @@ const {
       </div>
       <button type="submit" class="btn btn-primary">Notiz hinzufügen</button>
     </form>
-
+<!-- TODO: this note list needs to be removed, instead notes should appear on the pinboard and be removed there-->
     <table class="nodes">
       <tbody>
       <tr v-if="!notes.length">
