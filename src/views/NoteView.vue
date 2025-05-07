@@ -36,7 +36,7 @@ export interface CustomEvents {
 }
 
 type CustomNodeTypes = 'custom' | 'special'
-type CustomNode = Node<CustomData, CustomEvents, CustomNodeTypes>
+type CustomNode = Node<CustomData, never, CustomNodeTypes>
 
 
 const nodes = ref<CustomNode[]>([
@@ -54,7 +54,9 @@ const nodes = ref<CustomNode[]>([
       title: 'Example',
       author: 'Felix' ,
       content: 'On top of the default node types mentioned earlier, you can create as many custom node-types as you need.',
-      creationDate: new Date().toLocaleDateString()},
+      creationDate: new Date().toLocaleDateString(),
+      color: "#ffffff"
+    },
     type: 'custom',
     position: { x: 50, y: 50 } }
 ])

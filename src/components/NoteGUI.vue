@@ -91,7 +91,6 @@ const {
   onDragOver,
   onDragLeave,
   onDrop,
-  isDragOver,
 } = useDragAndDrop()
 
 </script>
@@ -155,7 +154,6 @@ const {
         :min-zoom="1"
     >
       <Background
-          gap="10"
           pattern-color="#c0c0c0"
           bgColor="#f6ab67"/>
     </VueFlow>
