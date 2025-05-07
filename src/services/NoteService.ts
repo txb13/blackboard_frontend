@@ -20,7 +20,7 @@ export default class NoteService {
     // TODO: add updateNote() for changing notes
     getNotes(): Promise<Note[]> {
         return axios
-            .get('http://localhost:8080/notes')
+            .get('https://blackboard-backend-hd9c.onrender.com/notes')
             .then((response) => {
                 const notes: Note[] = response.data;
                 console.log("GET notes:", notes);
@@ -29,7 +29,7 @@ export default class NoteService {
     }
     addNote(note: Note): Promise<void> {
         return axios
-            .post('http://localhost:8080/notes', note)
+            .post('https://blackboard-backend-hd9c.onrender.com/notes', note)
             .then(() => {
                 console.log("SET note:", note);
             });
