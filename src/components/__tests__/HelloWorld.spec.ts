@@ -1,11 +1,10 @@
 import { describe, it, expect } from 'vitest'
-
+import  NoteGui from '../NoteGui.vue'
 import { mount } from '@vue/test-utils'
-import HelloWorld from '../HelloWorld.vue'
 
-describe('HelloWorld', () => {
+describe('NoteGui', () => {
   it('renders properly', () => {
-    const wrapper = mount(HelloWorld, { props: { msg: 'Hello Vitest' } })
-    expect(wrapper.text()).toContain('Hello Vitest')
+    const wrapper = mount(NoteGui, { props: { msg: 'Pinboard' } })
+    expect(wrapper.text()).toContain('Pinboard')
   })
 })

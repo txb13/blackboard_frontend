@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { type NodeProps } from '@vue-flow/core'
-import type {CustomData, CustomEvents} from "@/views/NoteView.vue";
+import type {CustomData, } from "@/views/NoteView.vue";
 //import { CustomData, CustomEvents } from './nodes'
 
-const props = defineProps<NodeProps<CustomData, CustomEvents>>()
+const props = defineProps<NodeProps<CustomData>>()
 </script>
 
 

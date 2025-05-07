@@ -1,8 +1,8 @@
 <script setup lang="ts">
 
-/*TODO: change notes to have our custom design and attributes (see: CustomNode '../components/CustomNode.vue')
+/**    TODO: change notes to have our custom design and attributes (see: CustomNode '../components/CustomNode.vue')
     import CustomNode from '../components/CustomNode.vue'
- */
+ **/
 
 import { ref } from 'vue'
 import { VueFlow } from '@vue-flow/core'
@@ -155,7 +155,7 @@ const {
         :min-zoom="1"
     >
       <Background
-          gap="10"
+          :gap="16"
           pattern-color="#c0c0c0"
           bgColor="#f6ab67"/>
     </VueFlow>
