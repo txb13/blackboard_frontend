@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-interface Note {
+export interface Note {
     title: string;
     content: string;
     author: string;
@@ -32,6 +32,7 @@ export default class NoteService {
             .post('https://blackboard-backend-hd9c.onrender.com/notes', note)
             .then(() => {
                 console.log("SET note:", note);
+                return response.data;
             });
     }
 
