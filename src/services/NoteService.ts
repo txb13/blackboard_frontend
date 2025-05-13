@@ -20,7 +20,8 @@ export default class NoteService {
     // TODO: add updateNote() for changing notes
     getNotes(): Promise<Note[]> {
         return axios
-            .get('https://blackboard-backend-hd9c.onrender.com/notes')
+            // .get('https://blackboard-backend-hd9c.onrender.com/notes')
+            .get('http://localhost:8080/notes')
             .then((response) => {
                 const notes: Note[] = response.data;
                 console.log("GET notes:", notes);
@@ -29,8 +30,9 @@ export default class NoteService {
     }
     addNote(note: Note): Promise<void> {
         return axios
-            .post('https://blackboard-backend-hd9c.onrender.com/notes', note)
-            .then(() => {
+            // .post('https://blackboard-backend-hd9c.onrender.com/notes', note)
+            .post('http://localhost:8080/notes', note)
+            .then((response) => {
                 console.log("SET note:", note);
                 return response.data;
             });
