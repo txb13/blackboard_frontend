@@ -19,7 +19,6 @@ import CustomNode from '../components/CustomNode.vue'
     content: string,
     author:  string, }
 }
-
 const pbNotes = ref<PbNote[]>([])
 const {fitView } = useVueFlow()
 const noteService = new NoteService()

@@ -16,6 +16,7 @@ const props = defineProps<NodeProps<PbNote>>()
     - color needs to adjust
     - showcase if a note is terminated (for example grey it out)
 -->
+
   <img src="../assets/pin.svg"  alt="pin" class="pin"/>
   <div class="custom-node">
     <div class="card">
