@@ -37,5 +37,22 @@ export default class NoteService {
                 return response.data;
             });
     }
-
+    deleteNote(id: number): Promise<void> {
+        return axios
+             .delete(`https://blackboard-backend-hd9c.onrender.com/notes/${id}`)
+          //  .delete(`http://localhost:8080/notes/${id}`)
+            .then((response) => {
+                console.log("DELETE note:", id);
+                return response.data;
+            });
+    }
+    updateNote(note: Note): Promise<void> {
+        return axios
+             .put(`https://blackboard-backend-hd9c.onrender.com/notes/${note.id}`, note)
+         //   .put(`http://localhost:8080/notes/${note.id}`, note)
+            .then((response) => {
+                console.log("UPDATE note:", note);
+                return response.data;
+            });
+    }
 }

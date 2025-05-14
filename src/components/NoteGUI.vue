@@ -8,25 +8,38 @@ import {ref} from 'vue'
 import {useVueFlow, VueFlow} from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
 import NoteService, {type Note} from '../services/NoteService.ts'
+import type { Node } from '@vue-flow/core'
+import CustomNode from '../components/CustomNode.vue'
 
-interface PbNote {
+ interface PbNote {
   id: string
-  type: string
+  type: 'custom'
   position: { x: number; y: number }
-  data: { label: string }
+  data: {
+    title:   string,
+    content: string,
+    author:  string, }
 }
 
 const pbNotes = ref<PbNote[]>([])
 const {fitView } = useVueFlow()
 const noteService = new NoteService()
 
+const nodeTypes = {
+  custom: CustomNode,
+  // special: SpecialNode,
+}
+
 noteService.getNotes().then((notes: Note[]) => {
   for (const note of notes) {
     pbNotes.value.push({
       id: String(note.id),
-      type: 'input',
+      type: 'custom',
       position: { x: note.xPosition, y: note.yPosition },
-      data: { label: note.title },
+      data: {
+        title:   note.title,
+        content: note.content,
+        author:  note.author, },
     })
   }
 })
@@ -46,7 +59,7 @@ async function addNote() {
   if (!contentField.value.trim()) return
   await refresh()
   await noteService.addNote({
-    id: 0,
+   // id: 0,
     title: titleField.value.trim(),
     content: contentField.value.trim(),
     author: authorField.value.trim(),
@@ -67,14 +80,20 @@ async function addNote() {
 
 /* TODO: Notes need to to be removed by clicking an "X", they should also be removed from backend
  */
+async function deleteNote(id: string) {
+  await noteService.deleteNote(Number(id))
+  pbNotes.value = pbNotes.value.filter((note) => note.id !== id)
+}
 
 async function refresh() {
   const notes = await noteService.getNotes()
   pbNotes.value = notes.map((note, index) => ({
     id: String(index),
-    type: 'input',
+    type: 'custom',
     position: {x: note.xPosition, y: note.yPosition},
-    data: {label: note.title},
+    data: { title:   note.title,
+      content: note.content,
+      author:  note.author,},
   }))
   await fitView({duration: 500})
 }
@@ -88,8 +107,8 @@ refresh()
        the screens zooms into it and the user can add title, author, etc.
        it could also be possible to integrate the form into the note itself
        and disappear after clicking a button-->
-  <div class="container-fluid">
-    <h2>Erstelle hier Notizen auf unserem digitalen Blackboard</h2>
+  <div class="container lg:container mx-auto p-4">
+    <h2>Erstelle Notizen auf dem digitalen Blackboard</h2>
     <form @submit.prevent="addNote">
       <div class="form-row">
         <div class="form-group col-md-6">
@@ -112,13 +131,15 @@ refresh()
     Anzahl Notizen: {{pbNotes.length-1}}
   </div>
   </div>
-<div class="container-fluid">
+<div class="container lg:container ">
   <div class="canvas">
     <VueFlow
         class="board"
         :nodes="pbNotes"
-        :pan-on-drag="false"
-        :pan-on-scroll="false"
+        @node:delete="deleteNote"
+        :node-types="nodeTypes"
+        :pan-on-drag="true"
+        :pan-on-scroll="true"
         :nodes-draggable="true"
         :nodes-connectable="false"
         :auto-pan-on-node-drag="false"
@@ -127,8 +148,15 @@ refresh()
       <Background
           :gap="16"
           pattern-color="#c0c0c0"
-          bgColor="#f6ab67"/>
+          bgColor="#333"/>
     </VueFlow>
   </div>
 </div>
 </template>
+
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap');
+h2{
+  font-family: 'Shadows Into Light', cursive;
+  color: #c61111;}
+</style>
