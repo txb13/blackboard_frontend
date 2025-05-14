@@ -3,7 +3,6 @@
 /**    TODO: change notes to have our custom design and attributes (see: CustomNode '../components/CustomNode.vue')
     import CustomNode from '../components/CustomNode.vue'
  **/
-
 import {ref} from 'vue'
 import {useVueFlow, VueFlow} from '@vue-flow/core'
 import { Background } from '@vue-flow/background'

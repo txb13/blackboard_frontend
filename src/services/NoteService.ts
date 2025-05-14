@@ -14,7 +14,6 @@ export interface Note {
     height: number;
 }
 
-
 export default class NoteService {
     // TODO: add deleteNote() for removing notes
     // TODO: add updateNote() for changing notes

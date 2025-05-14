@@ -8,7 +8,6 @@ const props = defineProps<NodeProps<PbNote>>()
 
 </script>
 
-
 <template>
 <!--
   TODO: finish layout of CustomNode:
