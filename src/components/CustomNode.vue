@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { type NodeProps } from '@vue-flow/core'
-import {Note} from '../services/NoteService.ts'
-import {PbNote} from './NoteGUI.vue'
-//import { CustomData, CustomEvents } from './nodes'
+import type {PbNote} from './NoteGUI.vue'
 
 const props = defineProps<NodeProps<PbNote>>()
 
@@ -20,7 +18,6 @@ const props = defineProps<NodeProps<PbNote>>()
   <img src="../assets/pin.svg"  alt="pin" class="pin"/>
   <div class="custom-node">
     <div class="card">
-      <button class="btn-close" @click="$emit('delete', props.id)">×</button>
       <div class="card-header">
         {{ props.data.title }}
       </div>
@@ -40,6 +37,14 @@ const props = defineProps<NodeProps<PbNote>>()
 /*
   TODO: finish style and move it to main.css
 */
+
+.card-header{
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+.blockquote{
+  font-size: 1rem;}
+
 .custom-node {
   padding: 10px;
   border: 1px solid #ccc;

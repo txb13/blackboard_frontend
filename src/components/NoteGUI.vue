@@ -6,13 +6,13 @@
 import {ref} from 'vue'
 import {useVueFlow, VueFlow} from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
-import NoteService, {type Note} from '../services/NoteService.ts'
-import type { Node } from '@vue-flow/core'
+import NoteService from '../services/NoteService.ts'
+import type { Note } from '../services/NoteService.ts'
 import CustomNode from '../components/CustomNode.vue'
 
  interface PbNote {
-  id: string
-  type: 'custom'
+  id: string,
+  type: 'custom',
   position: { x: number; y: number }
   data: {
     title:   string,
@@ -57,7 +57,7 @@ async function addNote() {
   if (!contentField.value.trim()) return
   await refresh()
   await noteService.addNote({
-   // id: 0,
+    id: 0,
     title: titleField.value.trim(),
     content: contentField.value.trim(),
     author: authorField.value.trim(),
