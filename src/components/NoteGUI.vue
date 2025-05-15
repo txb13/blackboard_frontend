@@ -10,7 +10,7 @@ import NoteService from '../services/NoteService.ts'
 import type { Note } from '../services/NoteService.ts'
 import CustomNode from '../components/CustomNode.vue'
 
-interface PbNote {
+export interface PbNote {
   id: string,
   type: 'custom',
   position: { x: number; y: number }
@@ -26,8 +26,6 @@ const noteService = new NoteService()
 const nodeTypes = {
   custom: CustomNode,
 }
-
-
 
 noteService.getNotes().then((notes: Note[]) => {
   for (const note of notes) {
