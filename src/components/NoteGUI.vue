@@ -9,16 +9,8 @@ import { Background } from '@vue-flow/background'
 import NoteService from '../services/NoteService.ts'
 import type { Note } from '../services/NoteService.ts'
 import CustomNode from '../components/CustomNode.vue'
+import type {PbNote} from './CustomNode.vue'
 
- interface PbNote {
-  id: string,
-  type: 'custom',
-  position: { x: number; y: number }
-  data: {
-    title:   string,
-    content: string,
-    author:  string, }
-}
 const pbNotes = ref<PbNote[]>([])
 const {fitView } = useVueFlow()
 const noteService = new NoteService()
