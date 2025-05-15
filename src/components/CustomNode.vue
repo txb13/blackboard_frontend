@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type {NodeProps } from '@vue-flow/core'
-import PbNote from '../services/NoteService.ts'
+import PbNote from './NoteGUI.vue'
 
 const props = defineProps<NodeProps<PbNote>>()
 
