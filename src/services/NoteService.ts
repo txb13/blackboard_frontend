@@ -29,7 +29,7 @@ export default class NoteService {
     addNote(note: Note): Promise<void> {
         return axios
          //   .post('https://blackboard-backend-hd9c.onrender.com/notes', note)
-            .post('http://localhost:8080/notes', note)
+           .post('http://localhost:8080/notes', note)
             .then((response) => {
                 console.log("SET note:", note);
                 return response.data;
@@ -37,8 +37,8 @@ export default class NoteService {
     }
     deleteNote(id: number): Promise<void> {
         return axios
-            // .delete(`https://blackboard-backend-hd9c.onrender.com/notes/${id}`)
-              .delete(`http://localhost:8080/notes/${id}`)
+             .delete(`https://blackboard-backend-hd9c.onrender.com/notes/${id}`)
+            //  .delete(`http://localhost:8080/notes/${id}`)
                 .then((response) => {
                 console.log("DELETE note:", id);
                 return response.data;
