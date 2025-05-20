@@ -2,7 +2,6 @@
 import type {NodeProps } from '@vue-flow/core'
 import type { PbNoteData } from '../types/notes'
 
-// Hier: Generic ist nur der Data-Teil!
 const props = defineProps<NodeProps<PbNoteData>>()
 
 
@@ -26,7 +25,8 @@ const props = defineProps<NodeProps<PbNoteData>>()
       <div class="card-body">
         <blockquote class="blockquote mb-0">
           <p>{{ props.data.content }}</p>
-          <footer class="blockquote-footer">{{ props.data.author }} <cite title="Source Title">{{ props.data.creationDate }}</cite></footer>
+          <footer class="blockquote-footer">{{ props.data.author }}   <span class="title"> {{ props.data.creationDate }}</span></footer>
+
         </blockquote>
       </div>
     </div>
@@ -36,6 +36,7 @@ const props = defineProps<NodeProps<PbNoteData>>()
 </template>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&family=Protest+Guerrilla&family=Rubik+Iso&display=swap');
 /*
   TODO: finish style and move it to main.css
 */
@@ -45,7 +46,9 @@ const props = defineProps<NodeProps<PbNoteData>>()
   font-size: 1.3rem;
 }
 .blockquote{
-  font-size: 1rem;}
+  font-size: 1rem;
+  font-family: 'Gloria Hallelujah', cursive;
+}
 
 .custom-node {
   padding: 10px;
@@ -62,4 +65,5 @@ const props = defineProps<NodeProps<PbNoteData>>()
   padding: 0;
   margin: 0
 }
+
 </style>
