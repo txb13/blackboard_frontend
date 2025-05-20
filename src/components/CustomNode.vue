@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type {NodeProps } from '@vue-flow/core'
-import {PbNote} from './NoteGUI.vue'
+import type { PbNoteData } from '../types/notes'
 
-const props = defineProps<{
-  data: PbNote
-}>()
+// Hier: Generic ist nur der Data-Teil!
+const props = defineProps<NodeProps<PbNoteData>>()
+
 
 </script>
 

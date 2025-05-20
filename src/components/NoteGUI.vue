@@ -9,17 +9,10 @@ import { Background } from '@vue-flow/background'
 import NoteService from '../services/NoteService.ts'
 import type { Note } from '../services/NoteService.ts'
 import CustomNode from '../components/CustomNode.vue'
+import type { PbNote } from '../types/notes'
 
 
- interface PbNote {
-  id: string,
-  type: 'custom',
-  position: { x: number; y: number }
-  data: {
-    title:   string,
-    content: string,
-    author:  string, }
-}
+
 const pbNotes = ref<PbNote[]>([])
 const {fitView } = useVueFlow()
 const noteService = new NoteService()
@@ -126,7 +119,7 @@ refresh()
       <button type="submit" class="btn btn-primary">Notiz hinzufügen</button>
     </form>
   <div v-if=pbNotes>
-    Anzahl Notizen: {{pbNotes.length-1}}
+    Anzahl Notizen: {{pbNotes.length}}
   </div>
   </div>
 <div class="container lg:container ">
