@@ -53,7 +53,6 @@ async function addNote() {
   if (!contentField.value.trim()) return
   await refresh()
   await noteService.addNote({
-    id: 0,
     title: titleField.value.trim(),
     content: contentField.value.trim(),
     author: authorField.value.trim(),
@@ -81,6 +80,7 @@ async function deleteNote(id: string) {
 
 async function refresh() {
   const notes = await noteService.getNotes()
+  console.log('notes:', notes)
   pbNotes.value = notes.map((note, index) => ({
     id: String(index),
     type: 'custom',
