@@ -1,10 +1,11 @@
 import axios from 'axios'
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 export interface Note {
     title: string;
     content: string;
     author: string;
-    id: number;
     color: string | null;
     creationDate: string | undefined;
     terminationDate: string | null;
@@ -18,8 +19,7 @@ export default class NoteService {
     // TODO: add updateNote() for changing notes
     getNotes(): Promise<Note[]> {
         return axios
-            .get('https://blackboard-backend-hd9c.onrender.com/notes')
-            // .get('http://localhost:8080/notes')
+            .get(BACKEND_URL)
             .then((response) => {
                 const notes: Note[] = response.data;
                 console.log("GET notes:", notes);
@@ -28,8 +28,7 @@ export default class NoteService {
     }
     addNote(note: Note): Promise<void> {
         return axios
-           .post('https://blackboard-backend-hd9c.onrender.com/notes', note)
-       //   .post('http://localhost:8080/notes', note)
+           .post(BACKEND_URL, note)
             .then((response) => {
                 console.log("SET note:", note);
                 return response.data;
@@ -37,8 +36,7 @@ export default class NoteService {
     }
     deleteNote(id: number): Promise<void> {
         return axios
-             .delete(`https://blackboard-backend-hd9c.onrender.com/notes/${id}`)
-            //  .delete(`http://localhost:8080/notes/${id}`)
+             .delete(`${BACKEND_URL}/${id}`)
                 .then((response) => {
                 console.log("DELETE note:", id);
                 return response.data;
@@ -46,8 +44,7 @@ export default class NoteService {
     }
     updateNote(note: Note): Promise<void> {
         return axios
-            // .put(`https://blackboard-backend-hd9c.onrender.com/notes/${note.id}`, note)
-            .put(`http://localhost:8080/notes/${note.id}`, note)
+            .put(`${BACKEND_URL}/${note.id}`, note)
             .then((response) => {
                 console.log("UPDATE note:", note);
                 return response.data;
