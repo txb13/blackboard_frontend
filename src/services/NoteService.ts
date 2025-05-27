@@ -18,6 +18,7 @@ export default class NoteService {
     // TODO: add deleteNote() for removing notes
     // TODO: add updateNote() for changing notes
     getNotes(): Promise<Note[]> {
+        console.log("GET notes from backend:", BACKEND_URL);
         return axios
             .get(BACKEND_URL)
             .then((response) => {
@@ -34,20 +35,20 @@ export default class NoteService {
                 return response.data;
             });
     }
-    deleteNote(id: number): Promise<void> {
-        return axios
-             .delete(`${BACKEND_URL}/${id}`)
-                .then((response) => {
-                console.log("DELETE note:", id);
-                return response.data;
-            });
-    }
-    updateNote(note: Note): Promise<void> {
-        return axios
-            .put(`${BACKEND_URL}/${note.id}`, note)
-            .then((response) => {
-                console.log("UPDATE note:", note);
-                return response.data;
-            });
-    }
+    // deleteNote(id: number): Promise<void> {
+    //     return axios
+    //          .delete(`${BACKEND_URL}/${id}`)
+    //             .then((response) => {
+    //             console.log("DELETE note:", id);
+    //             return response.data;
+    //         });
+    // }
+    // updateNote(note: Note): Promise<void> {
+    //     return axios
+    //         .put(`${BACKEND_URL}/${note.id}`, note)
+    //         .then((response) => {
+    //             console.log("UPDATE note:", note);
+    //             return response.data;
+    //         });
+    //}
 }
