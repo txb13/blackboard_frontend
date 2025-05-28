@@ -20,7 +20,7 @@ const props = defineProps<NodeProps<PbNoteData>>()
   <div class="custom-node">
     <div class="card">
       <div class="card-header">
-        {{ props.data.title }}
+        {{ props.id }}_{{ props.data.title }}
       </div>
       <div class="card-body">
         <blockquote class="blockquote mb-0">
