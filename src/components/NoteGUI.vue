@@ -49,6 +49,13 @@ const nodeTypes = {
   // special: SpecialNode,
 }
 
+
+function pickColor(){
+  const colors = ['#FFDDC1', '#FFABAB', '#FFC3A0', '#D5AAFF', '#85E3FF', '#B9FBC0', '#FFF5BA'];
+  return colors[Math.floor(Math.random() * colors.length)]
+}
+const color = ref(pickColor())
+
 noteService.getNotes().then((notes: Note[]) => {
   let index: number = 0;
   for (const note of notes) {
@@ -59,6 +66,7 @@ noteService.getNotes().then((notes: Note[]) => {
       type: 'custom',
       position: { x: note.xPosition, y: note.yPosition },
       data: {
+        color:  note.color || color.value, // Use the color from the note or a random one
         title:   note.title,
         content: note.content,
         author:  note.author,
@@ -99,7 +107,7 @@ async function addNote() {
     title: titleField.value.trim(),
     content: contentField.value.trim(),
     author: authorField.value.trim(),
-    color: null,
+    color: color.value,
     creationDate: undefined,
     terminationDate: null,
     xPosition: Math.floor(Math.random() * 1000),
@@ -125,6 +133,7 @@ async function refresh() {
     type: 'custom',
     position: {x: note.xPosition, y: note.yPosition},
     data: { title:   note.title,
+      color: note.color,
       content: note.content,
       author:  note.author,
       creationDate: note.creationDate,},
@@ -133,6 +142,7 @@ async function refresh() {
 }
 
 refresh()
+
 
 </script>
 
@@ -212,5 +222,6 @@ h2{
 }
 .canvas{
   background-image: url('../assets/backgroundPinnboard.png');
+  border: 3px solid saddlebrown;
 }
 </style>
