@@ -24,7 +24,7 @@ const nodeTypes = {
 noteService.getNotes().then((notes: Note[]) => {
   for (const note of notes) {
     pbNotes.value.push({
-      id: String(note.id),
+      id: String(pbNotes.value.length),
       type: 'custom',
       position: { x: note.xPosition, y: note.yPosition },
       data: {
@@ -73,10 +73,6 @@ async function addNote() {
 
 /* TODO: Notes need to to be removed by clicking an "X", they should also be removed from backend
  */
-async function deleteNote(id: string) {
-  await noteService.deleteNote(Number(id))
-  pbNotes.value = pbNotes.value.filter((note) => note.id !== id)
-}
 
 async function refresh() {
   const notes = await noteService.getNotes()
@@ -143,7 +139,6 @@ refresh()
     <VueFlow
         class="board"
         :nodes="pbNotes"
-        @node:delete="deleteNote"
         :node-types="nodeTypes"
         :pan-on-drag="true"
         :pan-on-scroll="true"
