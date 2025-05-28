@@ -6,7 +6,7 @@ export interface Note {
     title: string;
     content: string;
     author: string;
-    color: string | null;
+    color: string ;
     creationDate: string | undefined;
     terminationDate: string | null;
     xPosition: number;

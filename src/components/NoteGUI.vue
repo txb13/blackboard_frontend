@@ -35,7 +35,7 @@ noteService.getNotes().then((notes: Note[]) => {
       type: 'custom',
       position: { x: note.xPosition, y: note.yPosition },
       data: {
-        color: note.color,
+        color:  note.color || color.value, // Use the color from the note or a random one
         title:   note.title,
         content: note.content,
         author:  note.author,
