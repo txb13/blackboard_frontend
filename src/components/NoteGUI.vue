@@ -135,7 +135,7 @@ refresh()
   </div>
 
 <div class="container lg:container ">
-  <div class="canvas">
+  <div class="canvas shadow-lg p-3 mb-5 bg-body rounded ">
     <VueFlow
         class="board"
         :nodes="pbNotes"
@@ -162,5 +162,8 @@ refresh()
 h2{
   font-family: 'Shadows Into Light', cursive;
   color: black;
+}
+.canvas{
+  background-image: url('../assets/backgroundPinnboard.png');
 }
 </style>
