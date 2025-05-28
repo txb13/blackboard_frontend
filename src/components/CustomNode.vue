@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import type {NodeProps } from '@vue-flow/core'
+import {useVueFlow} from '@vue-flow/core'
 import type { PbNoteData } from '../types/notes'
 
 const props = defineProps<NodeProps<PbNoteData>>()
 
+const { removeNodes } = useVueFlow()
 
+function onDelete() {
+  removeNodes([props.id])
+}
 </script>
 
 <template>
@@ -19,6 +24,7 @@ const props = defineProps<NodeProps<PbNoteData>>()
   <img src="../assets/pin.svg"  alt="pin" class="pin"/>
   <div class="custom-node">
     <div class="card">
+      <button class="delete-btn" @click="onDelete">×</button>
       <div class="card-header">
         {{ props.id }}_{{ props.data.title }}
       </div>
