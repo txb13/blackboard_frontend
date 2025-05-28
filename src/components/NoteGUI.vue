@@ -4,16 +4,43 @@
     import CustomNode from '../components/CustomNode.vue'
  **/
 import {ref} from 'vue'
-import {useVueFlow, VueFlow} from '@vue-flow/core'
+import {applyChanges, useVueFlow, VueFlow} from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
 import NoteService from '../services/NoteService.ts'
 import type { Note } from '../services/NoteService.ts'
 import CustomNode from '../components/CustomNode.vue'
 import type { PbNote } from '../types/notes'
 
+const { onNodesChange, applyNodeChanges } = useVueFlow()
+
+let selectedId: number = 0
+
+onNodesChange((changes) => {
+  const nextChanges = []
+  for (const change of changes) {
+    if (change.type === 'remove') {
+      console.log('Removing node:', change.id)
+      console.log('Removing node data:', noteService.getNote(Number(change.id)))
+      noteService.deleteNote(Number(change.id)).then(() => {
+        console.log('Node removed successfully:', change.id)
+      }).catch((error) => {
+        console.error('Error removing node:', error)
+      })
+    } else if (change.type === 'select') {
+      selectedId = Number(change.id)
+      console.log(selectedId)
+      nextChanges.push(change)
+    } else {
+      nextChanges.push(change)
+    }
+  }
+
+  applyNodeChanges(nextChanges)
+})
 
 
-const pbNotes = ref<PbNote[]>([])
+
+let pbNotes = ref<PbNote[]>([])
 const {fitView } = useVueFlow()
 const noteService = new NoteService()
 
@@ -22,6 +49,7 @@ const nodeTypes = {
   // special: SpecialNode,
 }
 
+
 function pickColor(){
   const colors = ['#FFDDC1', '#FFABAB', '#FFC3A0', '#D5AAFF', '#85E3FF', '#B9FBC0', '#FFF5BA'];
   return colors[Math.floor(Math.random() * colors.length)]
@@ -29,9 +57,12 @@ function pickColor(){
 const color = ref(pickColor())
 
 noteService.getNotes().then((notes: Note[]) => {
+  let index: number = 0;
   for (const note of notes) {
+    console.log('note:', index)
+    console.log('note-id:', note.id)
     pbNotes.value.push({
-      id: String(pbNotes.value.length),
+      id: String(note.id),
       type: 'custom',
       position: { x: note.xPosition, y: note.yPosition },
       data: {
@@ -42,6 +73,7 @@ noteService.getNotes().then((notes: Note[]) => {
         creationDate: note.creationDate,
       },
     })
+    index++;
   }
 })
 
@@ -50,6 +82,16 @@ function zoomToNote(target: string) {
     nodes: [target],
     duration: 1000,
   })
+}
+
+
+function deleteNote(noteId: number) {
+    pbNotes.value = pbNotes.value.filter((node) => node.id !== String(noteId))
+    noteService.deleteNote(noteId).then(() => {
+      console.log('Node removed successfully:', noteId)
+    }).catch((error) => {
+      console.error('Error removing node:', error)
+    })
 }
 
 const titleField = ref('')
@@ -61,6 +103,7 @@ async function addNote() {
   if (!contentField.value.trim()) return
   await refresh()
   await noteService.addNote({
+    id: undefined,
     title: titleField.value.trim(),
     content: contentField.value.trim(),
     author: authorField.value.trim(),
@@ -86,7 +129,7 @@ async function refresh() {
   const notes = await noteService.getNotes()
   console.log('notes:', notes)
   pbNotes.value = notes.map((note, index) => ({
-    id: String(index),
+    id: String(note.id),
     type: 'custom',
     position: {x: note.xPosition, y: note.yPosition},
     data: { title:   note.title,
@@ -112,6 +155,9 @@ refresh()
     <h2>Erstelle Notizen auf dem digitalen Blackboard</h2>
     <button class="btn btn-outline-warning" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
       &gt;&gt; Neue Notiz erstellen &lt;&lt;
+    </button>
+    <button class="btn btn-outline-warning" type="button" @click="deleteNote(selectedId)" aria-expanded="false" aria-controls="collapseExample">
+      &gt;&gt; Ausgewählte Notiz löschen &lt;&lt;
     </button>
     <div class="collapse" id="collapseExample">
       <div class="card card-body">
@@ -156,6 +202,7 @@ refresh()
         :nodes-connectable="false"
         :auto-pan-on-node-drag="false"
         :min-zoom="1"
+
     >
       <Background
           :gap="16"
