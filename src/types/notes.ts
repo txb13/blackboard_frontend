@@ -1,5 +1,6 @@
 // src/types/notes.ts
 export interface PbNoteData {
+  id?: number
   title: string
   content: string
   author: string
