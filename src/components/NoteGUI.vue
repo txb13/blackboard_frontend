@@ -54,7 +54,6 @@ function pickColor(){
   const colors = ['#FFDDC1', '#FFABAB', '#FFC3A0', '#D5AAFF', '#85E3FF', '#B9FBC0', '#FFF5BA'];
   return colors[Math.floor(Math.random() * colors.length)]
 }
-const color = ref(pickColor())
 
 noteService.getNotes().then((notes: Note[]) => {
   let index: number = 0;
@@ -101,13 +100,14 @@ const contentField = ref('')
 
 async function addNote() {
   if (!contentField.value.trim()) return
+  const newColor = pickColor()
   await refresh()
   await noteService.addNote({
     id: undefined,
     title: titleField.value.trim(),
     content: contentField.value.trim(),
     author: authorField.value.trim(),
-    color: color.value,
+    color: newColor,
     creationDate: undefined,
     terminationDate: null,
     xPosition: Math.floor(Math.random() * 1000),
@@ -182,10 +182,6 @@ refresh()
           </div>
           <button type="submit" class="btn btn-outline-warning">Notiz hinzufügen</button>
         </form>
-        <div v-if=pbNotes>
-          Anzahl Notizen: {{pbNotes.length}}
-        </div>
-
       </div>
     </div>
 
@@ -203,7 +199,7 @@ refresh()
         :nodes-draggable="true"
         :nodes-connectable="false"
         :auto-pan-on-node-drag="false"
-        :min-zoom="1"
+        :min-zoom="0.4"
 
     >
       <Background
@@ -212,17 +208,27 @@ refresh()
           />
     </VueFlow>
   </div>
+  <div class="textNotes" v-if=pbNotes>
+    Anzahl Notizen: {{pbNotes.length}}
+  </div>
 </div>
+
 </template>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Chango&family=Shadows+Into+Light&display=swap');
 h2{
-  font-family: 'Shadows Into Light', cursive;
+  font-family:'Chango', cursive;
   color: black;
 }
 .canvas{
   background-image: url('../assets/backgroundPinnboard.png');
+}
+.textNotes {
+  font-family: 'Shadows Into Light', cursive;
+  font-size: 1.2rem;
+  color: black;
+  margin-top: -2rem;
 }
 </style>

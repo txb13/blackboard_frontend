@@ -22,9 +22,8 @@ function onDelete() {
 -->
 
   <img src="../assets/pin.svg"  alt="pin" class="pin"/>
-  <div class="custom-node">
-    <div class="card">
-
+  <div class="custom-node shadow-lg">
+    <div class="card ">
       <div class="card-header">
         {{ props.id }}_{{ props.data.title }}
       </div>
