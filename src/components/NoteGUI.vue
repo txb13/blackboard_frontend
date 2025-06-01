@@ -188,7 +188,7 @@ refresh()
 
   </div>
 
-<div class="container lg:container ">
+<div class="container lg:container mx-auto p-4">
   <div class="canvas shadow-lg p-3 mb-5 bg-body rounded ">
     <VueFlow
         class="board"
