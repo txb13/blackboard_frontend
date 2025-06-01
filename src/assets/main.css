@@ -14,3 +14,4 @@ textarea { width: 100%; }
 .draggable-note { cursor: grab; }
 .draggable-note:active { cursor: grabbing; }
 
+body{background-color: aliceblue}

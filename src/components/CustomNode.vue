@@ -24,7 +24,7 @@ function onDelete() {
   <img src="../assets/pin.svg"  alt="pin" class="pin"/>
   <div class="custom-node">
     <div class="card">
-      <button class="delete-btn" @click="onDelete">×</button>
+
       <div class="card-header">
         {{ props.id }}_{{ props.data.title }}
       </div>
@@ -32,7 +32,8 @@ function onDelete() {
         <blockquote class="blockquote mb-0">
           <p>{{ props.data.content }}</p>
           <footer class="blockquote-footer">{{ props.data.author }}   <span class="title"> {{ props.data.creationDate }}</span></footer>
-
+          <button class="delete-btn" data-tooltip="Notiz löschen"
+                  @click="onDelete">X</button>
         </blockquote>
       </div>
     </div>
@@ -71,5 +72,32 @@ function onDelete() {
   padding: 0;
   margin: 0
 }
+.delete-btn {
+  background-image: url("../assets/iconDelete.png");
+  width: 24px;
+  height: 24px;
+  background-color: transparent;
+  border: none;
+  position: relative;
+}
 
+.delete-btn[data-tooltip] {
+  position: relative;
+}
+
+.delete-btn[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 5px 10px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 1000;
+
+}
 </style>

@@ -156,9 +156,11 @@ refresh()
     <button class="btn btn-outline-warning" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
       &gt;&gt; Neue Notiz erstellen &lt;&lt;
     </button>
+    <!--
     <button class="btn btn-outline-warning" type="button" @click="deleteNote(selectedId)" aria-expanded="false" aria-controls="collapseExample">
       &gt;&gt; Ausgewählte Notiz löschen &lt;&lt;
     </button>
+    -->
     <div class="collapse" id="collapseExample">
       <div class="card card-body">
 
@@ -222,6 +224,5 @@ h2{
 }
 .canvas{
   background-image: url('../assets/backgroundPinnboard.png');
-  border: 3px solid saddlebrown;
 }
 </style>
