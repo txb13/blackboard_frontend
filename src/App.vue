@@ -6,7 +6,7 @@ import { RouterLink, RouterView } from 'vue-router'
 <template>
   <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand d-flex align-items-center ms-3" href="#">
+      <a class="navbar-brand d-flex align-items-center ms-3" href="/">
         <img src="@/assets/logo_Pinnboard.png" width="30" height="30" class="me-2" alt="">
         <span>Pinnboard</span>
       </a>
