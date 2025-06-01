@@ -17,13 +17,10 @@ import { RouterLink, RouterView } from 'vue-router'
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <RouterLink to="/" class="nav-link" >Home</RouterLink>
+            <RouterLink to="/" class="nav-link" >Pinnwand</RouterLink>
           </li>
           <li class="nav-item">
-            <RouterLink to="/about" class="nav-link" >About</RouterLink>
-          </li>
-          <li class="nav-item">
-            <RouterLink to="/note" class="nav-link" >Note</RouterLink>
+            <RouterLink to="/about" class="nav-link" >Über</RouterLink>
           </li>
         </ul>
       </div>
