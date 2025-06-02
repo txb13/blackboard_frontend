@@ -20,6 +20,7 @@ onNodesChange((changes) => {
   for (const change of changes) {
     if (change.type === 'remove') {
       console.log('Removing node:', change.id)
+      pbNotes.value = pbNotes.value.filter(node => node.id !== String(change.id))
       console.log('Removing node data:', noteService.getNote(Number(change.id)))
       noteService.deleteNote(Number(change.id)).then(() => {
         console.log('Node removed successfully:', change.id)
