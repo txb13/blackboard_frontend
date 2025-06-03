@@ -54,13 +54,13 @@ export default class NoteService {
                 return response.data;
             });
     }
-    // updateNote(note: Note): Promise<void> {
-    //     return axios
-    //         .put(`${BACKEND_URL}/${note.id}`, note)
-    //         .then((response) => {
-    //             console.log("UPDATE note:", note);
-    //             return response.data;
-    //         });
-    //}
+    updateNote(noteChanges: Dict<never>, id: number): Promise<void> {
+        return axios
+            .put(`${BACKEND_URL}/${note.id}`, note)
+            .then((response) => {
+                console.log("UPDATE note:", note);
+                return response.data;
+            });
+    }
 
 }

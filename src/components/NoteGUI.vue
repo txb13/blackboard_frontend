@@ -3,7 +3,7 @@
 /**    TODO: change notes to have our custom design and attributes (see: CustomNode '../components/CustomNode.vue')
     import CustomNode from '../components/CustomNode.vue'
  **/
-import {ref} from 'vue'
+import {nextTick, ref} from 'vue'
 import {applyChanges, useVueFlow, VueFlow} from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
 import NoteService from '../services/NoteService.ts'
@@ -11,9 +11,11 @@ import type { Note } from '../services/NoteService.ts'
 import CustomNode from '../components/CustomNode.vue'
 import type { PbNote } from '../types/notes'
 
-const { onNodesChange, applyNodeChanges } = useVueFlow()
+const { onNodesChange, applyNodeChanges} = useVueFlow()
 
 let selectedId: number = 0
+
+let posChanges = []
 
 onNodesChange((changes) => {
   const nextChanges = []
@@ -30,7 +32,34 @@ onNodesChange((changes) => {
     } else if (change.type === 'select') {
       selectedId = Number(change.id)
       console.log(selectedId)
-      nextChanges.push(change)
+      nextChanges.push(change) }
+    else if (change.type === 'position') {
+      selectedId = Number(change.id)
+      if(change.dragging === true) {
+        posChanges.push(change)
+        nextChanges.push(change)
+      } if(change.dragging === false) {
+        nextChanges.push(change)
+        const lastPosChange = posChanges.filter(change => change.dragging === true).at(-1);
+        if (lastPosChange) {
+          console.log("Moved Node:", selectedId, "to", lastPosChange.position.x, lastPosChange.position.y);
+          noteService.getNote(selectedId).then((notes: Note[]) => {
+            const note = notes;
+            const updatedNote = {
+              ...note,
+              xPosition: Math.floor(lastPosChange.position.x),
+              yPosition: Math.floor(lastPosChange.position.y)
+            };
+            console.log(updatedNote);
+          });
+        }
+        posChanges = []
+        nextChanges.push(change)
+      }
+      // selectedId = Number(change.id)
+      // console.log(selectedId)
+      // console.log(change)
+
     } else {
       nextChanges.push(change)
     }
