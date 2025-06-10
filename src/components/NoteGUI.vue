@@ -1,24 +1,23 @@
 <script setup lang="ts">
 
 /**    TODO: change notes to have our custom design and attributes (see: CustomNode '../components/CustomNode.vue')
-    import CustomNode from '../components/CustomNode.vue'
+ import CustomNode from '../components/CustomNode.vue'
  **/
-import {nextTick, ref} from 'vue'
-import {applyChanges, useVueFlow, VueFlow} from '@vue-flow/core'
-import { Background } from '@vue-flow/background'
+import {ref} from 'vue'
+import {type NodeChange, type NodePositionChange, useVueFlow, VueFlow} from '@vue-flow/core'
+import {Background} from '@vue-flow/background'
+import type {Note} from '../services/NoteService.ts'
 import NoteService from '../services/NoteService.ts'
-import type { Note } from '../services/NoteService.ts'
 import CustomNode from '../components/CustomNode.vue'
-import type { PbNote } from '../types/notes'
+import type {PbNote} from '../types/notes'
 
 const { onNodesChange, applyNodeChanges} = useVueFlow()
 
 let selectedId: number = 0
-
-let posChanges = []
+let posChanges: NodePositionChange[] = []
 
 onNodesChange((changes) => {
-  const nextChanges = []
+  const nextChanges: NodeChange[] = []
   for (const change of changes) {
     if (change.type === 'remove') {
       console.log('Removing node:', change.id)
@@ -32,45 +31,52 @@ onNodesChange((changes) => {
     } else if (change.type === 'select') {
       selectedId = Number(change.id)
       console.log(selectedId)
-      nextChanges.push(change) }
-    else if (change.type === 'position') {
+      nextChanges.push(change)
+
+    } else if (change.type === 'position') {
+      const posChange = change as NodePositionChange;
+      console.log('Position change detected for node:', change.id)
       selectedId = Number(change.id)
-      if(change.dragging === true) {
-        posChanges.push(change)
-        nextChanges.push(change)
-      } if(change.dragging === false) {
-        nextChanges.push(change)
-        const lastPosChange = posChanges.filter(change => change.dragging === true).at(-1);
+
+      if (posChange.dragging === true) {
+        posChanges.push(posChange)
+        nextChanges.push(posChange)
+
+      } else if (posChange.dragging === false) {
+        nextChanges.push(posChange)
+        const lastPosChange = posChanges.filter(c => (c as NodePositionChange).dragging).at(-1);
+
         if (lastPosChange) {
           console.log("Moved Node:", selectedId, "to", lastPosChange.position.x, lastPosChange.position.y);
-          noteService.getNote(selectedId).then((notes: Note[]) => {
-            const note = notes;
+          noteService.getNote(selectedId).then((notes: Note) => {
             const updatedNote = {
-              ...note,
+              ...notes,
               xPosition: Math.floor(lastPosChange.position.x),
               yPosition: Math.floor(lastPosChange.position.y)
             };
             console.log(updatedNote);
+            noteService.updateNote(updatedNote, selectedId).then(() => {
+              console.log('Node updated successfully:', selectedId)
+            }).catch((error) => {
+              console.error('Error updating node:', error)
+            })
           });
         }
+
         posChanges = []
-        nextChanges.push(change)
       }
-      // selectedId = Number(change.id)
-      // console.log(selectedId)
-      // console.log(change)
 
     } else {
       nextChanges.push(change)
     }
   }
-
+  console.log("Changes", nextChanges)
   applyNodeChanges(nextChanges)
 })
 
 
 
-let pbNotes = ref<PbNote[]>([])
+const pbNotes = ref<PbNote[]>([])
 const {fitView } = useVueFlow()
 const noteService = new NoteService()
 
@@ -114,15 +120,6 @@ function zoomToNote(target: string) {
 }
 
 
-function deleteNote(noteId: number) {
-    pbNotes.value = pbNotes.value.filter((node) => node.id !== String(noteId))
-    noteService.deleteNote(noteId).then(() => {
-      console.log('Node removed successfully:', noteId)
-    }).catch((error) => {
-      console.error('Error removing node:', error)
-    })
-}
-
 const titleField = ref('')
 const authorField = ref('')
 const contentField = ref('')
@@ -158,7 +155,7 @@ async function addNote() {
 async function refresh() {
   const notes = await noteService.getNotes()
   console.log('notes:', notes)
-  pbNotes.value = notes.map((note, index) => ({
+  pbNotes.value = notes.map((note) => ({
     id: String(note.id),
     type: 'custom',
     position: {x: note.xPosition, y: note.yPosition},
@@ -173,7 +170,6 @@ async function refresh() {
 
 refresh()
 
-
 </script>
 
 <template>
@@ -186,14 +182,8 @@ refresh()
     <button class="btn btn-outline-warning" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
       &gt;&gt; Neue Notiz erstellen &lt;&lt;
     </button>
-    <!--
-    <button class="btn btn-outline-warning" type="button" @click="deleteNote(selectedId)" aria-expanded="false" aria-controls="collapseExample">
-      &gt;&gt; Ausgewählte Notiz löschen &lt;&lt;
-    </button>
-    -->
     <div class="collapse" id="collapseExample">
       <div class="card card-body">
-
         <form @submit.prevent="addNote">
           <div class="form-row">
             <div class="form-group col-md-6">
