@@ -5,6 +5,7 @@ export interface PbNoteData {
   content: string
   author: string
   creationDate?: string
+  terminationDate?: string
   color?: string
   // …ggf. noch terminationDate, width, height, etc.
 }

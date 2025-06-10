@@ -10,6 +10,7 @@ const { removeNodes } = useVueFlow()
 function onDelete() {
   removeNodes([props.id])
 }
+
 </script>
 
 <template>
@@ -25,14 +26,15 @@ function onDelete() {
   <div class="custom-node shadow-lg">
     <div class="card ">
       <div class="card-header">
-        {{ props.id }}_{{ props.data.title }}
+       <span> {{ props.id }}_{{ props.data.title }}</span>
+          <button class="delete-btn" data-tooltip="Notiz löschen" @click="onDelete"></button>
       </div>
+
       <div class="card-body">
         <blockquote class="blockquote mb-0">
           <p>{{ props.data.content }}</p>
           <footer class="blockquote-footer">{{ props.data.author }}   <span class="title"> {{ props.data.creationDate }}</span></footer>
-          <button class="delete-btn" data-tooltip="Notiz löschen"
-                  @click="onDelete">X</button>
+          <p>gültig bis: <span id="text"> {{props.data.terminationDate}}</span></p>
         </blockquote>
       </div>
     </div>
@@ -50,6 +52,10 @@ function onDelete() {
 .card-header{
   font-weight: bold;
   font-size: 1.3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
 }
 .blockquote{
   font-size: 1rem;
@@ -77,7 +83,10 @@ function onDelete() {
   height: 24px;
   background-color: transparent;
   border: none;
-  position: relative;
+  margin-left: auto;
+}
+#text{
+  color: crimson;
 }
 
 .delete-btn[data-tooltip] {
@@ -86,9 +95,9 @@ function onDelete() {
 
 .delete-btn[data-tooltip]:hover::after {
   content: attr(data-tooltip);
-  position: absolute;
+  position: relative;
+  right: 0;
   bottom: 100%;
-  left: 50%;
   transform: translateX(-50%);
   padding: 5px 10px;
   background-color: rgba(0, 0, 0, 0.8);

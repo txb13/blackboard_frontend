@@ -102,6 +102,7 @@ noteService.getNotes().then((notes: Note[]) => {
         content: note.content,
         author:  note.author,
         creationDate: note.creationDate,
+        terminationDate: note.terminationDate,
       },
     })
     index++;
@@ -121,6 +122,17 @@ function zoomToNextNode() {
   if (pbNotes.value.length === 0) return
 
   currentNodeIndex.value = (currentNodeIndex.value + 1) % pbNotes.value.length
+  const targetNode = pbNotes.value[currentNodeIndex.value]
+
+  if (targetNode) {
+    zoomToNote(targetNode.id)
+  }
+}
+
+function zoomToPrevNode() {
+  if (pbNotes.value.length === 0) return
+
+  currentNodeIndex.value = (currentNodeIndex.value - 1 + pbNotes.value.length) % pbNotes.value.length
   const targetNode = pbNotes.value[currentNodeIndex.value]
 
   if (targetNode) {
@@ -154,7 +166,7 @@ async function addNote() {
     author: authorField.value.trim(),
     color: newColor,
     creationDate: undefined,
-    terminationDate: null,
+    terminationDate: undefined,
     xPosition: Math.floor(Math.random() * 1000),
     yPosition: Math.floor(Math.random() * 400),
     width: 100,
@@ -181,7 +193,9 @@ async function refresh() {
       color: note.color,
       content: note.content,
       author:  note.author,
-      creationDate: note.creationDate,},
+      creationDate: note.creationDate,
+      terminationDate: note.terminationDate
+    },
   }))
   await fitView({duration: 500})
 }
@@ -192,20 +206,11 @@ refresh()
 </script>
 
 <template>
-<!--  TODO: Instead of using a form, a button has to "spawn" a Note on the board,
-       the screens zooms into it and the user can add title, author, etc.
-       it could also be possible to integrate the form into the note itself
-       and disappear after clicking a button-->
   <div class="container lg:container mx-auto p-4">
     <h2>Erstelle Notizen auf dem digitalen Blackboard</h2>
     <button class="btn btn-outline-warning" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
       &gt;&gt; Neue Notiz erstellen &lt;&lt;
     </button>
-    <!--
-    <button class="btn btn-outline-warning" type="button" @click="deleteNote(selectedId)" aria-expanded="false" aria-controls="collapseExample">
-      &gt;&gt; Ausgewählte Notiz löschen &lt;&lt;
-    </button>
-    -->
     <div class="collapse" id="collapseExample">
       <div class="card card-body">
 
@@ -235,7 +240,9 @@ refresh()
 
 
 <div class="container lg:container mx-auto p-4">
-  <button  class="delete-btn" @click="zoomToNextNode"> x</button>
+  <button  class="delete-btn bi bi-arrow-left-square" @click="zoomToNextNode"> </button>
+  <span id="zoom">Zoom</span>
+  <button class="delete-btn bi bi-arrow-right-square" @click="zoomToPrevNode">  </button>
   <div class="canvas shadow-lg p-3 mb-5 bg-body rounded ">
     <VueFlow
         class="board"
@@ -270,6 +277,7 @@ h2{
 }
 .canvas{
   background-image: url('../assets/backgroundPinnboard.png');
+  margin-top: 0;
 }
 .textNotes {
   font-family: 'Shadows Into Light', cursive;
@@ -278,10 +286,17 @@ h2{
   margin-top: -2rem;
 }
 .delete-btn {
-  background-image: url("../assets/zoom.png");
+
   width: 48px;
   height: 48px;
 background-color: transparent;
   border: none;
+}
+#zoom {
+  font-size: 1.2rem;
+  color: black;
+}
+.bi {
+  font-size: 1.2rem;
 }
 </style>
