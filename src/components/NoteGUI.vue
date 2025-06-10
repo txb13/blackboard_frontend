@@ -11,6 +11,7 @@ import type { Note } from '../services/NoteService.ts'
 import CustomNode from '../components/CustomNode.vue'
 import type { PbNote } from '../types/notes'
 
+
 const { onNodesChange, applyNodeChanges} = useVueFlow()
 
 let selectedId: number = 0
@@ -85,6 +86,7 @@ function pickColor(){
   return colors[Math.floor(Math.random() * colors.length)]
 }
 
+
 noteService.getNotes().then((notes: Note[]) => {
   let index: number = 0;
   for (const note of notes) {
@@ -109,8 +111,21 @@ noteService.getNotes().then((notes: Note[]) => {
 function zoomToNote(target: string) {
   fitView({
     nodes: [target],
+
     duration: 1000,
   })
+}
+
+const currentNodeIndex = ref(-1)
+function zoomToNextNode() {
+  if (pbNotes.value.length === 0) return
+
+  currentNodeIndex.value = (currentNodeIndex.value + 1) % pbNotes.value.length
+  const targetNode = pbNotes.value[currentNodeIndex.value]
+
+  if (targetNode) {
+    zoomToNote(targetNode.id)
+  }
 }
 
 
@@ -218,7 +233,9 @@ refresh()
 
   </div>
 
+
 <div class="container lg:container mx-auto p-4">
+  <button  class="delete-btn" @click="zoomToNextNode"> x</button>
   <div class="canvas shadow-lg p-3 mb-5 bg-body rounded ">
     <VueFlow
         class="board"
@@ -230,7 +247,6 @@ refresh()
         :nodes-connectable="false"
         :auto-pan-on-node-drag="false"
         :min-zoom="0.4"
-
     >
       <Background
           :gap="16"
@@ -260,5 +276,12 @@ h2{
   font-size: 1.2rem;
   color: black;
   margin-top: -2rem;
+}
+.delete-btn {
+  background-image: url("../assets/zoom.png");
+  width: 48px;
+  height: 48px;
+background-color: transparent;
+  border: none;
 }
 </style>
