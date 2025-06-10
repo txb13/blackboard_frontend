@@ -28,14 +28,14 @@ export default class NoteService {
                 return notes;
             });
     }
-    getNote(noteId: number): Promise<Note[]> {
-        console.log("GET note", noteId, "from backend:", BACKEND_URL);
+    getNote(id: number): Promise<Note> {
+        console.log("GET note", id, "from backend:", BACKEND_URL);
         return axios
-            .get(`${BACKEND_URL}/${noteId}`)
+            .get(`${BACKEND_URL}/${id}`)
             .then((response) => {
-                const notes: Note[] = response.data;
-                console.log("GET note:", notes);
-                return notes;
+                const note: Note = response.data;
+                console.log("GET note:", note);
+                return note;
             });
     }
     addNote(note: Note): Promise<void> {
@@ -54,11 +54,11 @@ export default class NoteService {
                 return response.data;
             });
     }
-    updateNote(noteChanges: Dict<never>, id: number): Promise<void> {
+    updateNote(note: Note, id: number): Promise<void> {
         return axios
             .put(`${BACKEND_URL}/${note.id}`, note)
             .then((response) => {
-                console.log("UPDATE note:", note);
+                console.log("UPDATE note:", id);
                 return response.data;
             });
     }
