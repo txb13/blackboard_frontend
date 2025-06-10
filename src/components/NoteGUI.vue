@@ -210,6 +210,11 @@ refresh()
 
 <div class="container lg:container mx-auto p-4">
   <div class="canvas shadow-lg p-3 mb-5 bg-body rounded ">
+    <div class="d-flex justify-content-end">
+      <button @click="refresh" class="btn" type="button">
+        <i class="bi bi-arrow-clockwise fs-2"></i>
+      </button>
+    </div>
     <VueFlow
         class="board"
         :nodes="pbNotes"
