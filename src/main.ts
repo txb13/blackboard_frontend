@@ -1,4 +1,5 @@
 import './assets/main.css'
+import 'bootstrap-icons/font/bootstrap-icons.css'
 // main.ts
 
 
