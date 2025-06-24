@@ -27,7 +27,8 @@ function onDelete() {
     <div class="card ">
       <div class="card-header">
        <span> {{ props.id }}_{{ props.data.title }}</span>
-          <button class="delete-btn" data-tooltip="Notiz löschen" @click="onDelete"></button>
+          <button class="delete-btn bi bi-trash3-fill" data-tooltip="Notiz löschen" @click="onDelete">
+          </button>
       </div>
 
       <div class="card-body">
@@ -50,13 +51,18 @@ function onDelete() {
 */
 
 .card-header{
-  font-weight: bold;
+  font-family: 'Gloria Hallelujah', cursive;
   font-size: 1.3rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-
+  padding: 7px;
 }
+
+.card-body{
+  padding: 10px;
+}
+
 .blockquote{
   font-size: 1rem;
   font-family: 'Gloria Hallelujah', cursive;
@@ -77,28 +83,27 @@ function onDelete() {
   padding: 0;
   margin: 0
 }
-.delete-btn {
-  background-image: url("../assets/iconDelete.png");
-  width: 24px;
-  height: 24px;
-  background-color: transparent;
-  border: none;
-  margin-left: auto;
-}
+
 #text{
   color: crimson;
 }
 
+.delete-btn {
+  background-color: transparent;
+  border: none;
+  margin-left: auto;
+}
+
 .delete-btn[data-tooltip] {
   position: relative;
+  z-index: 1000;
 }
 
 .delete-btn[data-tooltip]:hover::after {
   content: attr(data-tooltip);
-  position: relative;
-  right: 0;
-  bottom: 100%;
-  transform: translateX(-50%);
+  position: absolute; /* changed from relative to absolute */
+  left: 100%;
+  bottom: -50%;
   padding: 5px 10px;
   background-color: rgba(0, 0, 0, 0.8);
   color: white;
@@ -106,6 +111,6 @@ function onDelete() {
   font-size: 12px;
   white-space: nowrap;
   z-index: 1000;
-
+  pointer-events: none;
 }
 </style>

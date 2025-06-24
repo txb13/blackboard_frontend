@@ -202,7 +202,7 @@ refresh()
 </script>
 
 <template>
-  <div class="container lg:container mx-auto p-4">
+  <div class="container lg:container mx-auto p-4 pb-0">
     <h2>Erstelle Notizen auf dem digitalen Blackboard</h2>
     <button class="btn btn-outline-warning" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
       &gt;&gt; Neue Notiz erstellen &lt;&lt;
@@ -229,16 +229,14 @@ refresh()
         </form>
       </div>
     </div>
-
-
   </div>
-
-
 <div class="container lg:container mx-auto p-4">
-  <button  class="zoom-btn bi bi-arrow-left-square" @click="zoomToNextNode"> </button>
-  <span id="zoom">Zoom</span>
-  <button class="zoom-btn bi bi-arrow-right-square" @click="zoomToPrevNode">  </button>
-  <div class="canvas shadow-lg p-3 mb-5 bg-body rounded position-relative">
+  <div class="canvas shadow-lg mb-5 bg-body rounded position-relative">
+    <div class="position-absolute top-0 z-2">
+      <button  class="zoom-btn bi bi-arrow-left-square" @click="zoomToNextNode"> </button>
+      <span id="zoom">Zoom</span>
+      <button class="zoom-btn bi bi-arrow-right-square" @click="zoomToPrevNode">  </button>
+    </div>
     <div class="position-absolute top-0 end-0 z-3">
       <button @click="refresh" class="btn" type="button">
         <i class="bi bi-arrow-clockwise fs-2"></i>
@@ -253,7 +251,7 @@ refresh()
         :nodes-draggable="true"
         :nodes-connectable="false"
         :auto-pan-on-node-drag="false"
-        :min-zoom="0.4"
+        :min-zoom="0.1"
     >
       <Background
           :gap="16"
@@ -303,6 +301,7 @@ background-color: transparent;
 #zoom {
   font-size: 1.2rem;
   color: black;
+  user-select:none;
 }
 .bi {
   font-size: 1.2rem;
