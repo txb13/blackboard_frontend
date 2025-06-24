@@ -1,7 +1,6 @@
 import axios from 'axios'
-import type {AxiosResponse} from 'axios'
 
- const BACKEND_URL = import.meta.env.VITE_BACKEND_BASE_URL;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_BASE_URL;
 
 export interface Note {
     id?: number;
@@ -10,16 +9,13 @@ export interface Note {
     author: string;
     color: string ;
     creationDate: string | undefined;
-    terminationDate: string | null;
+    terminationDate: string | undefined;
     xPosition: number;
     yPosition: number;
     width: number;
     height: number;
 }
 export default class NoteService {
-    // TODO: add deleteNote() for removing notes
-    // TODO: add updateNote() for changing notes
-
     getNotes(): Promise<Note[]> {
         console.log("GET notes from backend:", BACKEND_URL);
         return axios

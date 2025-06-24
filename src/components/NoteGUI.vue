@@ -108,7 +108,7 @@ noteService.getNotes().then((notes: Note[]) => {
         content: note.content,
         author:  note.author,
         creationDate: note.creationDate,
-        terminationDate: note.terminationDate,
+        terminationDate: note.terminationDate
       },
     })
     index++;
