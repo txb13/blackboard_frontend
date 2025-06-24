@@ -283,16 +283,8 @@ h2{
   color: black;
   margin-top: -2rem;
 }
-.delete-btn {
-
-  width: 48px;
-  height: 48px;
-background-color: transparent;
-  border: none;
-}
 
 .zoom-btn {
-
   width: 48px;
   height: 48px;
   background-color: transparent;
