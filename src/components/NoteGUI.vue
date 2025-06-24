@@ -235,11 +235,11 @@ refresh()
 
 
 <div class="container lg:container mx-auto p-4">
-  <button  class="delete-btn bi bi-arrow-left-square" @click="zoomToNextNode"> </button>
+  <button  class="zoom-btn bi bi-arrow-left-square" @click="zoomToNextNode"> </button>
   <span id="zoom">Zoom</span>
-  <button class="delete-btn bi bi-arrow-right-square" @click="zoomToPrevNode">  </button>
-  <div class="canvas shadow-lg p-3 mb-5 bg-body rounded ">
-    <div class="d-flex justify-content-end">
+  <button class="zoom-btn bi bi-arrow-right-square" @click="zoomToPrevNode">  </button>
+  <div class="canvas shadow-lg p-3 mb-5 bg-body rounded position-relative">
+    <div class="position-absolute top-0 end-0 z-3">
       <button @click="refresh" class="btn" type="button">
         <i class="bi bi-arrow-clockwise fs-2"></i>
       </button>
@@ -290,6 +290,14 @@ h2{
   width: 48px;
   height: 48px;
 background-color: transparent;
+  border: none;
+}
+
+.zoom-btn {
+
+  width: 48px;
+  height: 48px;
+  background-color: transparent;
   border: none;
 }
 #zoom {
