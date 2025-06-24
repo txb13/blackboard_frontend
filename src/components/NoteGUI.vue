@@ -14,6 +14,7 @@ import type {PbNote} from '../types/notes'
 import ZoomControls from "@/components/ZoomControls.vue";
 import {useZoom} from "@/utils/useZoom.ts";
 import NoteForm from "@/components/NoteForm.vue";
+import RefreshButton from "@/components/RefreshButton.vue";
 
 
 const { onNodesChange, applyNodeChanges} = useVueFlow()
@@ -185,26 +186,23 @@ refresh()
   <div class="container lg:container pb-0">
     <div class="canvas shadow-lg mb-0 bg-body rounded position-relative">
       <ZoomControls :on-next="zoomToNextNote" :on-prev="zoomToPrevNote" />
-    <div class="position-absolute top-0 end-0 z-2">
-      <button @click="refresh" class="refresh-btn bi bi-arrow-clockwise" type="button"></button>
-    </div>
-
-    <VueFlow
-        class="board"
-        :nodes="pbNotes"
-        :node-types="nodeTypes"
-        :pan-on-drag="true"
-        :pan-on-scroll="true"
-        :nodes-draggable="true"
-        :nodes-connectable="false"
-        :auto-pan-on-node-drag="false"
-        :min-zoom="0.1"
-    >
-      <Background
-          :gap="16"
-          pattern-color="#c0c0c0"
-          />
-    </VueFlow>
+      <RefreshButton :refresh="refresh"></RefreshButton>
+      <VueFlow
+          class="board"
+          :nodes="pbNotes"
+          :node-types="nodeTypes"
+          :pan-on-drag="true"
+          :pan-on-scroll="true"
+          :nodes-draggable="true"
+          :nodes-connectable="false"
+          :auto-pan-on-node-drag="false"
+          :min-zoom="0.1"
+      >
+        <Background
+            :gap="16"
+            pattern-color="#c0c0c0"
+            />
+      </VueFlow>
     <div class="position-absolute start-0 bottom-0 z-2" id="note-count" v-if=pbNotes>
       Notizen: {{pbNotes.length}}
     </div>
@@ -228,12 +226,7 @@ h2{
   background-image: url('../assets/backgroundPinnboard.png');
 }
 
-.refresh-btn {
-  height: 30px;
-  background-color: transparent;
-  border: none;
-  padding: 10px;
-}
+
 
 #note-count {
   font-size: 1.2rem;
@@ -241,10 +234,5 @@ h2{
   user-select:none;
   padding: 10px;
 }
-
-.bi {
-  font-size: 1.2rem;
-}
-
 
 </style>
