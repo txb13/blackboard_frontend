@@ -4,7 +4,7 @@
  import CustomNode from '../components/CustomNode.vue'
  **/
 import {ref} from 'vue'
-import {type NodeChange, type NodePositionChange, useVueFlow, VueFlow} from '@vue-flow/core'
+import {useVueFlow, VueFlow} from '@vue-flow/core'
 import {Background} from '@vue-flow/background'
 import type {Note} from '../services/NoteService.ts'
 import NoteService from '../services/NoteService.ts'
