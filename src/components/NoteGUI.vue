@@ -177,19 +177,14 @@ refresh()
 
 <template>
   <NoteForm
-      :titleField="titleField"
-      :authorField="authorField"
-      :contentField="contentField"
-      @update:titleField="val => titleField = val"
-      @update:authorField="val => authorField = val"
-      @update:contentField="val => contentField = val"
+      v-model:titleField="titleField"
+      v-model:authorField="authorField"
+      v-model:contentField="contentField"
       @addNote="addNote"
   />
   <div class="container lg:container pb-0">
     <div class="canvas shadow-lg mb-0 bg-body rounded position-relative">
-
       <ZoomControls :on-next="zoomToNextNote" :on-prev="zoomToPrevNote" />
-
     <div class="position-absolute top-0 end-0 z-2">
       <button @click="refresh" class="refresh-btn bi bi-arrow-clockwise" type="button"></button>
     </div>
