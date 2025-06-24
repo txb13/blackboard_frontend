@@ -85,6 +85,9 @@ export function useNoteData(noteService: NoteService, pbNotes: Ref<PbNote[]>, fi
     return {
         getNotes,
         addNote,
-        refresh
+        refresh,
+        titleField,
+        authorField,
+        contentField
     }
 }

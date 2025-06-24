@@ -6,7 +6,6 @@
 import {ref} from 'vue'
 import {useVueFlow, VueFlow} from '@vue-flow/core'
 import {Background} from '@vue-flow/background'
-import type {Note} from '../services/NoteService.ts'
 import NoteService from '../services/NoteService.ts'
 import CustomNode from '../components/CustomNode.vue'
 import type {PbNote} from '../types/notes'
@@ -17,12 +16,16 @@ import NoteForm from "@/components/NoteForm.vue";
 import RefreshButton from "@/components/RefreshButton.vue";
 
 import {useNodeChangeHandler} from "@/utils/useChangeHandler.ts";
+import {useNoteData} from "@/utils/useNoteData.ts";
 
 
 const pbNotes = ref<PbNote[]>([])
 const { fitView } = useVueFlow()
-const { zoomToNote, zoomToNextNote, zoomToPrevNote} = useZoom(pbNotes, fitView)
+const {zoomToNextNote, zoomToPrevNote} = useZoom(pbNotes, fitView)
+
 const noteService = new NoteService()
+
+const {getNotes, addNote, refresh, titleField, authorField, contentField} = useNoteData(noteService, pbNotes, fitView)
 
 const nodeTypes = {
   custom: CustomNode,
@@ -30,86 +33,7 @@ const nodeTypes = {
 }
 
 useNodeChangeHandler({ pbNotes, noteService })
-
-
-function pickColor(){
-  const colors = ['#FFDDC1', '#FFABAB', '#FFC3A0', '#D5AAFF', '#85E3FF', '#B9FBC0', '#FFF5BA'];
-  return colors[Math.floor(Math.random() * colors.length)]
-}
-
-
-noteService.getNotes().then((notes: Note[]) => {
-  let index: number = 0;
-  for (const note of notes) {
-    console.log('note:', index)
-    console.log('note-id:', note.id)
-    pbNotes.value.push({
-      id: String(note.id),
-      type: 'custom',
-      position: { x: note.xPosition, y: note.yPosition },
-      data: {
-        color:  note.color || pickColor(),
-        title:   note.title,
-        content: note.content,
-        author:  note.author,
-        creationDate: note.creationDate,
-        terminationDate: note.terminationDate
-      },
-    })
-    index++;
-  }
-})
-
-const titleField = ref('')
-const authorField = ref('')
-const contentField = ref('')
-
-
-async function addNote() {
-  if (!contentField.value.trim()) return
-  const newColor = pickColor()
-  await refresh()
-  await noteService.addNote({
-    id: undefined,
-    title: titleField.value.trim(),
-    content: contentField.value.trim(),
-    author: authorField.value.trim(),
-    color: newColor,
-    creationDate: undefined,
-    terminationDate: undefined,
-    xPosition: Math.floor(Math.random() * 1000),
-    yPosition: Math.floor(Math.random() * 400),
-    width: 100,
-    height: 100
-  });
-  await refresh()
-  setTimeout(() => {
-    zoomToNote(String(pbNotes.value.length - 1))
-  }, 50)
-  // contentField.value = ''
-}
-
-/* TODO: Notes need to to be removed by clicking an "X", they should also be removed from backend
- */
-
-async function refresh() {
-  const notes = await noteService.getNotes()
-  console.log('notes:', notes)
-  pbNotes.value = notes.map((note) => ({
-    id: String(note.id),
-    type: 'custom',
-    position: {x: note.xPosition, y: note.yPosition},
-    data: { title:   note.title,
-      color: note.color,
-      content: note.content,
-      author:  note.author,
-      creationDate: note.creationDate,
-      terminationDate: note.terminationDate
-    },
-  }))
-  await fitView({duration: 500})
-}
-
+getNotes()
 refresh()
 
 
