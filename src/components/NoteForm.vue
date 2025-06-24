@@ -6,21 +6,22 @@
     </button>
     <div class="collapse" id="collapseExample">
       <div class="card card-body">
-        <form @submit.prevent="addNote">
+        <form @submit.prevent="handleSubmit">
           <div class="form-row">
             <div class="form-group col-md-6">
-              <input class="form-control" v-model="titleField" placeholder="Titel">
+              <input class="form-control" v-model="localTitle" placeholder="Titel" />
             </div>
             <div class="form-group col-md-6">
-              <input class="form-control" v-model="authorField" placeholder="Autor">
+              <input class="form-control" v-model="localAuthor" placeholder="Autor" />
             </div>
           </div>
           <div class="form-group">
-            <textarea class="form-control"
-                      v-model="contentField"
-                      placeholder="Schreibe deine Notiz hier …"
-                      rows="3">
-            </textarea>
+            <textarea
+                class="form-control"
+                v-model="localContent"
+                placeholder="Schreibe deine Notiz hier …"
+                rows="3"
+            ></textarea>
           </div>
           <button type="submit" class="btn btn-outline-warning">Notiz hinzufügen</button>
         </form>
@@ -30,13 +31,32 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
-  titleField: () => void
-  authorField: () => void
-  contentField: () => void
+import { ref, watch } from 'vue'
+
+const props = defineProps<{
+  titleField: string
+  authorField: string
+  contentField: string
 }>()
+
+const emit = defineEmits<{
+  (e: 'update:titleField', value: string): void
+  (e: 'update:authorField', value: string): void
+  (e: 'update:contentField', value: string): void
+  (e: 'addNote'): void
+}>()
+
+// Create local refs to bind to v-model
+const localTitle = ref(props.titleField)
+const localAuthor = ref(props.authorField)
+const localContent = ref(props.contentField)
+
+// Sync local changes back to parent
+watch(localTitle, (val) => emit('update:titleField', val))
+watch(localAuthor, (val) => emit('update:authorField', val))
+watch(localContent, (val) => emit('update:contentField', val))
+
+function handleSubmit() {
+  emit('addNote')
+}
 </script>
-
-<style scoped>
-
-</style>
