@@ -13,6 +13,7 @@ import type {PbNote} from '../types/notes'
 
 import ZoomControls from "@/components/ZoomControls.vue";
 import {useZoom} from "@/utils/useZoom.ts";
+import NoteForm from "@/components/NoteForm.vue";
 
 
 const { onNodesChange, applyNodeChanges} = useVueFlow()
@@ -175,34 +176,15 @@ refresh()
 </script>
 
 <template>
-  <div class="container lg:container pb-0">
-    <h2>Erstelle Notizen auf dem digitalen Blackboard</h2>
-    <button class="btn btn-outline-warning" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-      &gt;&gt; Neue Notiz erstellen &lt;&lt;
-    </button>
-    <div class="collapse" id="collapseExample">
-      <div class="card card-body">
-        <form @submit.prevent="addNote">
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <input class="form-control" v-model="titleField" placeholder="Titel">
-            </div>
-            <div class="form-group col-md-6">
-              <input class="form-control" v-model="authorField" placeholder="Autor">
-            </div>
-          </div>
-          <div class="form-group">
-            <textarea class="form-control"
-                      v-model="contentField"
-                      placeholder="Schreibe deine Notiz hier …"
-                      rows="3">
-            </textarea>
-          </div>
-          <button type="submit" class="btn btn-outline-warning">Notiz hinzufügen</button>
-        </form>
-      </div>
-    </div>
-  </div>
+  <NoteForm
+      :titleField="titleField"
+      :authorField="authorField"
+      :contentField="contentField"
+      @update:titleField="val => titleField = val"
+      @update:authorField="val => authorField = val"
+      @update:contentField="val => contentField = val"
+      @addNote="addNote"
+  />
   <div class="container lg:container pb-0">
     <div class="canvas shadow-lg mb-0 bg-body rounded position-relative">
 
