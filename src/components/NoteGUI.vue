@@ -202,7 +202,7 @@ refresh()
 </script>
 
 <template>
-  <div class="container lg:container mx-auto p-4">
+  <div class="container lg:container pb-0">
     <h2>Erstelle Notizen auf dem digitalen Blackboard</h2>
     <button class="btn btn-outline-warning" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
       &gt;&gt; Neue Notiz erstellen &lt;&lt;
@@ -219,31 +219,28 @@ refresh()
             </div>
           </div>
           <div class="form-group">
-      <textarea class="form-control"
-                v-model="contentField"
-                placeholder="Schreibe deine Notiz hier …"
-                rows="3">
-      </textarea>
+            <textarea class="form-control"
+                      v-model="contentField"
+                      placeholder="Schreibe deine Notiz hier …"
+                      rows="3">
+            </textarea>
           </div>
           <button type="submit" class="btn btn-outline-warning">Notiz hinzufügen</button>
         </form>
       </div>
     </div>
-
-
   </div>
-
-
-<div class="container lg:container mx-auto p-4">
-  <button  class="delete-btn bi bi-arrow-left-square" @click="zoomToNextNode"> </button>
-  <span id="zoom">Zoom</span>
-  <button class="delete-btn bi bi-arrow-right-square" @click="zoomToPrevNode">  </button>
-  <div class="canvas shadow-lg p-3 mb-5 bg-body rounded ">
-    <div class="d-flex justify-content-end">
-      <button @click="refresh" class="btn" type="button">
-        <i class="bi bi-arrow-clockwise fs-2"></i>
-      </button>
+  <div class="container lg:container pb-0">
+    <div class="canvas shadow-lg mb-0 bg-body rounded position-relative">
+    <div class="position-absolute top-0 z-2 d-flex align-items-center gap-2">
+      <button class="zoom-btn bi bi-arrow-left-square" @click="zoomToNextNode"></button>
+      <span id="zoom">Zoom</span>
+      <button class="zoom-btn bi bi-arrow-right-square" @click="zoomToPrevNode"></button>
     </div>
+    <div class="position-absolute top-0 end-0 z-2">
+      <button @click="refresh" class="refresh-btn bi bi-arrow-clockwise" type="button"></button>
+    </div>
+
     <VueFlow
         class="board"
         :nodes="pbNotes"
@@ -253,19 +250,18 @@ refresh()
         :nodes-draggable="true"
         :nodes-connectable="false"
         :auto-pan-on-node-drag="false"
-        :min-zoom="0.4"
+        :min-zoom="0.1"
     >
       <Background
           :gap="16"
           pattern-color="#c0c0c0"
           />
     </VueFlow>
-  </div>
-  <div class="textNotes" v-if=pbNotes>
-    Anzahl Notizen: {{pbNotes.length}}
+    <div class="position-absolute start-0 bottom-0 z-2" id="note-count" v-if=pbNotes>
+      Notizen: {{pbNotes.length}}
+    </div>
   </div>
 </div>
-
 </template>
 
 <style scoped>
@@ -275,28 +271,44 @@ h2{
   font-family:'Chango', cursive;
   color: black;
 }
-.canvas{
-  background-image: url('../assets/backgroundPinnboard.png');
-  margin-top: 0;
-}
-.textNotes {
-  font-family: 'Shadows Into Light', cursive;
-  font-size: 1.2rem;
-  color: black;
-  margin-top: -2rem;
-}
-.delete-btn {
 
-  width: 48px;
-  height: 48px;
-background-color: transparent;
-  border: none;
+.canvas  {
+  height: 70vh;
+  width: 100%;
+  border: 1px solid #ddd;
+  margin-top: 1rem;
+  background-image: url('../assets/backgroundPinnboard.png');
 }
+
+.zoom-btn {
+  background-color: transparent;
+  border: none;
+  padding: 10px;
+}
+
+.refresh-btn {
+  height: 30px;
+  background-color: transparent;
+  border: none;
+  padding: 10px;
+}
+
 #zoom {
   font-size: 1.2rem;
   color: black;
+  user-select:none;
 }
+
+#note-count {
+  font-size: 1.2rem;
+  color: black;
+  user-select:none;
+  padding: 10px;
+}
+
 .bi {
   font-size: 1.2rem;
 }
+
+
 </style>
