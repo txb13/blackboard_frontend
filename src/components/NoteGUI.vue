@@ -273,7 +273,12 @@ h2{
   font-family:'Chango', cursive;
   color: black;
 }
-.canvas{
+
+.canvas  {
+  height: 70vh;
+  width: 100%;
+  border: 1px solid #ddd;
+  margin-top: 1rem;
   background-image: url('../assets/backgroundPinnboard.png');
   margin-top: 0;
 }
