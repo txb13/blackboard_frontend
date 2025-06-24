@@ -11,6 +11,9 @@ import NoteService from '../services/NoteService.ts'
 import CustomNode from '../components/CustomNode.vue'
 import type {PbNote} from '../types/notes'
 
+import ZoomControls from "@/components/ZoomControls.vue";
+import {useZoom} from "@/utils/useZoom.ts";
+
 
 const { onNodesChange, applyNodeChanges} = useVueFlow()
 
@@ -78,7 +81,8 @@ onNodesChange((changes) => {
 
 
 const pbNotes = ref<PbNote[]>([])
-const {fitView } = useVueFlow()
+const { fitView } = useVueFlow()
+const { zoomToNote, zoomToNextNote, zoomToPrevNote} = useZoom(pbNotes, fitView)
 const noteService = new NoteService()
 
 const nodeTypes = {
@@ -114,38 +118,6 @@ noteService.getNotes().then((notes: Note[]) => {
     index++;
   }
 })
-
-function zoomToNote(target: string) {
-  fitView({
-    nodes: [target],
-
-    duration: 1000,
-  })
-}
-
-const currentNodeIndex = ref(-1)
-function zoomToNextNode() {
-  if (pbNotes.value.length === 0) return
-
-  currentNodeIndex.value = (currentNodeIndex.value + 1) % pbNotes.value.length
-  const targetNode = pbNotes.value[currentNodeIndex.value]
-
-  if (targetNode) {
-    zoomToNote(targetNode.id)
-  }
-}
-
-function zoomToPrevNode() {
-  if (pbNotes.value.length === 0) return
-
-  currentNodeIndex.value = (currentNodeIndex.value - 1 + pbNotes.value.length) % pbNotes.value.length
-  const targetNode = pbNotes.value[currentNodeIndex.value]
-
-  if (targetNode) {
-    zoomToNote(targetNode.id)
-  }
-}
-
 
 const titleField = ref('')
 const authorField = ref('')
@@ -199,6 +171,7 @@ async function refresh() {
 
 refresh()
 
+
 </script>
 
 <template>
@@ -232,11 +205,9 @@ refresh()
   </div>
   <div class="container lg:container pb-0">
     <div class="canvas shadow-lg mb-0 bg-body rounded position-relative">
-    <div class="position-absolute top-0 z-2 d-flex align-items-center gap-2">
-      <button class="zoom-btn bi bi-arrow-left-square" @click="zoomToNextNode"></button>
-      <span id="zoom">Zoom</span>
-      <button class="zoom-btn bi bi-arrow-right-square" @click="zoomToPrevNode"></button>
-    </div>
+
+      <ZoomControls :on-next="zoomToNextNote" :on-prev="zoomToPrevNote" />
+
     <div class="position-absolute top-0 end-0 z-2">
       <button @click="refresh" class="refresh-btn bi bi-arrow-clockwise" type="button"></button>
     </div>
@@ -280,23 +251,11 @@ h2{
   background-image: url('../assets/backgroundPinnboard.png');
 }
 
-.zoom-btn {
-  background-color: transparent;
-  border: none;
-  padding: 10px;
-}
-
 .refresh-btn {
   height: 30px;
   background-color: transparent;
   border: none;
   padding: 10px;
-}
-
-#zoom {
-  font-size: 1.2rem;
-  color: black;
-  user-select:none;
 }
 
 #note-count {
