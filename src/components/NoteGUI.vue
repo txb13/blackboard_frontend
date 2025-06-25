@@ -36,8 +36,9 @@ useNodeChangeHandler({ pbNotes, noteService })
 getNotes()
 refresh()
 
-
-
+function handleAddNote(color: string) {
+  addNote(color)  // Übergebe die Farbe an die addNote-Funktion
+}
 
 </script>
 
@@ -46,7 +47,11 @@ refresh()
       v-model:titleField="titleField"
       v-model:authorField="authorField"
       v-model:contentField="contentField"
-      @addNote="addNote"
+      @addNote="handleAddNote"
+      :noteService="noteService"
+      :pbNotes="pbNotes"
+      :fitView="fitView"
+
   />
   <div class="container lg:container pb-0">
     <div class="canvas shadow-lg mb-0 bg-body rounded position-relative">

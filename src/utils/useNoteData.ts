@@ -58,16 +58,16 @@ export function useNoteData(noteService: NoteService, pbNotes: Ref<PbNote[]>, fi
         await fitView({duration: 500})
     }
 
-    async function addNote() {
+    async function addNote(color?: string) {
         if (!contentField.value.trim()) return
-        const newColor = pickColor()
+        const noteColor = color || pickColor()
         await refresh()
         await noteService.addNote({
             id: undefined,
             title: titleField.value.trim(),
             content: contentField.value.trim(),
             author: authorField.value.trim(),
-            color: newColor,
+            color: noteColor,
             creationDate: undefined,
             terminationDate: undefined,
             xPosition: Math.floor(Math.random() * 1000),
@@ -88,6 +88,7 @@ export function useNoteData(noteService: NoteService, pbNotes: Ref<PbNote[]>, fi
         refresh,
         titleField,
         authorField,
-        contentField
+        contentField,
+        pickColor,
     }
 }
