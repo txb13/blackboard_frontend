@@ -37,6 +37,8 @@ getNotes()
 refresh()
 
 
+
+
 </script>
 
 <template>
@@ -66,8 +68,11 @@ refresh()
             pattern-color="#c0c0c0"
             />
       </VueFlow>
-    <div class="position-absolute start-0 bottom-0 z-2" id="note-count" v-if=pbNotes>
+    <div class="position-absolute start-0 bottom-0 z-2" id="note-count" v-if="pbNotes.length!==0">
       Notizen: {{pbNotes.length}}
+    </div>
+    <div class="position-absolute start-0 bottom-0 z-2" id="note-count" v-if="pbNotes.length===0">
+      keine Notizen vorhanden
     </div>
   </div>
 </div>
