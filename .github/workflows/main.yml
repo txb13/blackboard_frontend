@@ -8,10 +8,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
-      - name: Use node 20.9.0
+      - name: Use node 24.0.2
         uses: actions/setup-node@v2
         with:
-          node-version: 20.9.0
+          node-version: 24.0.2
 
       - name: Clear npm cache
         run: npm cache clean --force
@@ -23,8 +23,6 @@ jobs:
       - name: Install dependencies
         run: npm install
       
-      - name: Explicitly install rollup native dependency
-        run: npm install @rollup/rollup-linux-x64-gnu --no-save
 
       - name: Run tests
         run: npm run test:unit
