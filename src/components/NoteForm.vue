@@ -23,6 +23,11 @@
                 rows="3"
             ></textarea>
           </div>
+          <div class="form-group">
+            <label for="Farbe auswählen"> Farbe auswählen</label>
+            <input type="color" class="form-control form-control-color"
+                   id="Farbe auswählen" title="Farbe auswählen" />
+          </div>
           <button type="submit" class="btn btn-outline-warning">Notiz hinzufügen</button>
         </form>
       </div>
@@ -33,11 +38,17 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 
+
+
+const selectedColor = ref('')
 const props = defineProps<{
   titleField: string
   authorField: string
   contentField: string
+
 }>()
+
+
 
 const emit = defineEmits<{
   (e: 'update:titleField', value: string): void
@@ -58,5 +69,6 @@ watch(localContent, (val) => emit('update:contentField', val))
 
 function handleSubmit() {
   emit('addNote')
+
 }
 </script>
