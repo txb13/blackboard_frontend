@@ -1,9 +1,19 @@
 <script setup lang="ts">
-import type {NodeProps } from '@vue-flow/core'
 import {useVueFlow} from '@vue-flow/core'
-import type { PbNoteData } from '../types/notes'
+import type {PbNoteData} from '../types/notes'
+import DeleteButton from "@/components/DeleteButton.vue";
+import EditButton from "@/components/EditButton.vue";
+import {useEdit} from "@/utils/useEdit.ts";
+
+
+import type {NodeProps } from '@vue-flow/core'
+import {ref} from "vue";
 
 const props = defineProps<NodeProps<PbNoteData>>()
+
+const { fitView } = useVueFlow()
+
+const {editNote, sendChanges} = useEdit(props, fitView)
 
 const { removeNodes } = useVueFlow()
 
@@ -11,30 +21,59 @@ function onDelete() {
   removeNodes([props.id])
 }
 
+const isEditing = ref(false);
+
+function onEdit() {
+  isEditing.value = !isEditing.value;
+  if (!isEditing.value) {
+    editNote()
+  }
+  else {
+    sendChanges()
+  }
+  console.log(isEditing)
+}
+
 </script>
 
 <template>
-<!--
-  TODO: finish layout of CustomNode:
-    - it needs to feature all attributes
-    - width and height need to get dimensions from note
-    - color needs to adjust
-    - showcase if a note is terminated (for example grey it out)
--->
-
   <img src="../assets/pin.svg"  alt="pin" class="pin"/>
   <div class="custom-node shadow-lg">
-    <div class="card ">
+    <div class="card " v-if="!isEditing">
       <div class="card-header">
-       <span> {{ props.id }}_{{ props.data.title }}</span>
-          <button class="delete-btn bi bi-trash3-fill" data-tooltip="Notiz löschen" @click="onDelete">
-          </button>
+        <span class="mr-5">{{ props.id }}: {{ props.data.title }}</span>
+        <div class="card-actions">
+          <EditButton :onEdit="onEdit" />
+          <DeleteButton :on-delete="onDelete" />
+        </div>
       </div>
-
       <div class="card-body">
         <blockquote class="blockquote mb-0">
           <p>{{ props.data.content }}</p>
           <footer class="blockquote-footer">{{ props.data.author }}   <span class="title"> {{ props.data.creationDate }}</span></footer>
+          <p>gültig bis: <span id="text"> {{props.data.terminationDate}}</span></p>
+        </blockquote>
+      </div>
+    </div>
+    <div class="card " v-if="isEditing">
+      <div class="card-header">
+          <span class="mr-2">{{ props.id }}:</span>
+        <input type="text" class="form-control mr-1" :value="props.data.title">
+        <div class="card-actions">
+          <EditButton :onEdit="onEdit" />
+          <DeleteButton :on-delete="onDelete" />
+        </div>
+      </div>
+      <div class="card-body">
+        <blockquote class="blockquote mb-0">
+          <textarea
+              class="form-control"
+              :value="props.data.content"
+          ></textarea>
+          <footer class="blockquote-footer edit-author-input">
+            <input type="text" class="form-control mr-1 edit-author-text" :value="props.data.author">
+            <span class="ml-2">{{ props.data.creationDate }}</span>
+          </footer>
           <p>gültig bis: <span id="text"> {{props.data.terminationDate}}</span></p>
         </blockquote>
       </div>
@@ -63,9 +102,19 @@ function onDelete() {
   padding: 10px;
 }
 
+.card {
+  min-width: 300px;
+  max-width: 300px;
+  font-family: 'Gloria Hallelujah', cursive;
+}
+
 .blockquote{
   font-size: 1rem;
   font-family: 'Gloria Hallelujah', cursive;
+}
+
+.form-control{
+  padding: 0 10px;
 }
 
 .custom-node {
@@ -88,29 +137,19 @@ function onDelete() {
   color: crimson;
 }
 
-.delete-btn {
-  background-color: transparent;
-  border: none;
+.card-actions {
   margin-left: auto;
+  display: flex;
 }
 
-.delete-btn[data-tooltip] {
-  position: relative;
-  z-index: 1000;
+.edit-author-input {
+  margin-top: 10px;
+  display: flex;
 }
 
-.delete-btn[data-tooltip]:hover::after {
-  content: attr(data-tooltip);
-  position: absolute; /* changed from relative to absolute */
-  left: 100%;
-  bottom: -50%;
-  padding: 5px 10px;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
-  border-radius: 4px;
-  font-size: 12px;
-  white-space: nowrap;
-  z-index: 1000;
-  pointer-events: none;
+.edit-author-text {
+  font-size: .875em;
+  color: #6c757d;
 }
+
 </style>
