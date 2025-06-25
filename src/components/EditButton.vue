@@ -1,7 +1,7 @@
 <template>
   <button
-      class="edit-btn bi bi-pencil-fill"
-      data-tooltip="Notiz bearbeiten"
+      :class="['edit-btn bi', icon]"
+      :data-tooltip="tooltip"
       @click="onEdit"
   />
 </template>
@@ -9,6 +9,7 @@
 <script setup lang="ts">
 const { onEdit } = defineProps<{
   onEdit: () => void
+  icon?: string | string[] | Record<string, boolean>
 }>()
 </script>
 

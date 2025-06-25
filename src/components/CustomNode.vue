@@ -69,7 +69,7 @@ function onDelete() {
       <div class="card-header">
         <span class="mr-5">{{ props.id }}: {{ props.data.title }}</span>
         <div class="card-actions">
-          <EditButton :onEdit="handleEdit" />
+          <EditButton :onEdit="handleEdit" icon="bi-pencil-fill" data-tooltip="Notiz bearbeiten"/>
           <DeleteButton :on-delete="onDelete" />
         </div>
       </div>
@@ -91,7 +91,7 @@ function onDelete() {
             @input="event => handleInputChange('title', event)"
         >
         <div class="card-actions">
-          <EditButton :onEdit="handleEdit" />
+          <EditButton :onEdit="handleEdit" icon="bi-check-circle" data-tooltip="Änderungen speichern"/>
           <DeleteButton :on-delete="onDelete" />
         </div>
       </div>
@@ -133,6 +133,7 @@ function onDelete() {
   justify-content: space-between;
   align-items: center;
   padding: 7px;
+  word-wrap: break-word;
 }
 
 .card-body{
@@ -141,7 +142,7 @@ function onDelete() {
 
 .card {
   min-width: 300px;
-  max-width: 300px;
+  max-width: 450px;
   font-family: 'Gloria Hallelujah', cursive;
 }
 
@@ -187,6 +188,10 @@ function onDelete() {
 .edit-author-text {
   font-size: .875em;
   color: #6c757d;
+}
+
+* {
+  word-wrap: break-word;
 }
 
 </style>

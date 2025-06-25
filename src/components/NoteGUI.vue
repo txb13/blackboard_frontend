@@ -69,9 +69,6 @@ useNodeChangeHandler({ pbNotes, noteService })
       keine Notizen vorhanden
     </div>
   </div>
-    <div class="position-absolute start-0 bottom-0" id="note-count" v-if="pbNotes.length!==0">
-      nodesDraggable: {{isEditing}}
-    </div>
 </div>
 </template>
 
