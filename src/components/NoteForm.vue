@@ -24,8 +24,8 @@
             ></textarea>
           </div>
           <div class="form-group">
-            <label for="Farbe auswählen"> Farbe</label>
-            <input type="color" class="form-control form-control-color"  v-model="selectedColor"
+            <label for="Farbe auswählen"> Farbe auswählen</label>
+            <input type="color" class="form-control form-control-color"
                    id="Farbe auswählen" title="Farbe auswählen" />
           </div>
           <button type="submit" class="btn btn-outline-warning">Notiz hinzufügen</button>
@@ -37,7 +37,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { useNoteData } from '@/utils/useNoteData'
+
 
 
 const selectedColor = ref('')
@@ -45,20 +45,16 @@ const props = defineProps<{
   titleField: string
   authorField: string
   contentField: string
-  noteService: never
-  pbNotes: never
-  fitView: never
 
 }>()
 
-const { pickColor } = useNoteData(props.noteService, props.pbNotes, props.fitView)
 
 
 const emit = defineEmits<{
   (e: 'update:titleField', value: string): void
   (e: 'update:authorField', value: string): void
   (e: 'update:contentField', value: string): void
-  (e: 'addNote', color:string): void
+  (e: 'addNote'): void
 }>()
 
 // Create local refs to bind to v-model
@@ -72,8 +68,7 @@ watch(localAuthor, (val) => emit('update:authorField', val))
 watch(localContent, (val) => emit('update:contentField', val))
 
 function handleSubmit() {
-  const noteColor = selectedColor.value || pickColor()
-  emit('addNote', noteColor)
+  emit('addNote')
   selectedColor.value = ''
 
 }
