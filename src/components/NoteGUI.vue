@@ -61,13 +61,13 @@ useNodeChangeHandler({ pbNotes, noteService })
             pattern-color="#c0c0c0"
             />
       </VueFlow>
-    <div class="position-absolute start-0 bottom-0 z-2" id="note-count" v-if="pbNotes.length!==0">
+    <div class="position-absolute start-0 bottom-0 z-2" v-if="pbNotes.length===0">
+      keine Notizen vorhanden
+    </div>
+    <div class="position-absolute start-0 bottom-0 z-2" id="note-count" v-else>
       Notizen: {{pbNotes.length}}
     </div>
 
-    <div class="position-absolute start-0 bottom-0 z-2" id="note-count" v-if="pbNotes.length===0">
-      keine Notizen vorhanden
-    </div>
   </div>
 </div>
 </template>

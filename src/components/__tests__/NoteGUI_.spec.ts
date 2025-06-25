@@ -24,7 +24,8 @@ vi.mock('@vue-flow/core', () => ({
     useVueFlow: () => ({
         onNodesChange: vi.fn(),
         applyNodeChanges: vi.fn(),
-        fitView: vi.fn()
+        fitView: vi.fn(),
+        setNodes: vi.fn(),
     }),
     VueFlow: {
         name: 'VueFlow',
