@@ -1,13 +1,8 @@
 import { ref } from 'vue'
-import type {PbNoteData} from '../types/notes'
-import NoteService from "@/services/NoteService";
-
-
-const noteService = new NoteService()
-
-
-import {useNoteStore} from "@/stores/useNoteStore.ts";
-const { refresh } = useNoteStore();
+import type { PbNoteData } from '../types/notes'
+import type { Note } from '../services/NoteService'
+import type NoteService from '../services/NoteService'
+import { useNoteStore } from './useNoteStore'
 
 interface EditingChanges {
     title: string;
@@ -20,6 +15,8 @@ const currentEditingId = ref<string | null>(null)
 const pendingChanges = ref<EditingChanges | null>(null)
 
 export function useEditStore() {
+    const { refresh } = useNoteStore()
+
     function startEditing(nodeId: string, initialData: PbNoteData) {
         isEditing.value = true
         currentEditingId.value = nodeId
@@ -30,13 +27,7 @@ export function useEditStore() {
         }
     }
 
-    async function stopEditing() {
-        const saved = await saveChanges()
-        if (saved) {
-            console.log('Changes saved successfully')
-        } else {
-            console.log('Failed to save changes')
-        }
+    function stopEditing() {
         isEditing.value = false
         currentEditingId.value = null
         pendingChanges.value = null
@@ -46,6 +37,27 @@ export function useEditStore() {
         if (pendingChanges.value) {
             pendingChanges.value[field] = value
         }
+    }
+
+    async function saveChanges(noteService: NoteService, originalNote: Note) {
+        if (currentEditingId.value && pendingChanges.value) {
+            try {
+                const updatedNote: Note = {
+                    ...originalNote,
+                    title: pendingChanges.value.title,
+                    content: pendingChanges.value.content,
+                    author: pendingChanges.value.author
+                }
+                await noteService.updateNote(updatedNote, Number(currentEditingId.value))
+                await refresh()
+                stopEditing()
+                return true
+            } catch (error) {
+                console.error('Failed to save changes:', error)
+                return false
+            }
+        }
+        return false
     }
 
     function getPendingChanges() {
@@ -60,42 +72,13 @@ export function useEditStore() {
         }
     }
 
-    async function saveChanges() {
-        if (currentEditingId.value && pendingChanges.value) {
-            const selectedId = Number(currentEditingId.value)
-            try {
-                const note = await noteService.getNote(selectedId)
-
-                const updatedNote = {
-                    ...note,
-                    title: pendingChanges.value.title,
-                    author: pendingChanges.value.author,
-                    content: pendingChanges.value.content,
-                }
-
-                console.log("originalNote:", note)
-                console.log("updatedNote:", updatedNote)
-
-                await noteService.updateNote(updatedNote, selectedId)
-                await refresh()
-                console.log('Node updated successfully:', selectedId)
-                return true
-            } catch (error) {
-                console.error('Failed to save changes:', error)
-                return false
-            }
-        }
-        return false
-    }
-
-
     return {
         isEditing,
         currentEditingId,
         toggleEdit,
         updateField,
         getPendingChanges,
-        stopEditing,
         saveChanges
     }
 }
+

@@ -6,15 +6,48 @@ import EditButton from "@/components/EditButton.vue";
 import { useEditStore } from '@/stores/useEditStore'
 import type { NodeProps } from '@vue-flow/core'
 import { computed } from "vue"
+import type {Note} from "../services/NoteService.ts";
 
 const props = defineProps<NodeProps<PbNoteData>>()
 const { removeNodes } = useVueFlow()
 const { currentEditingId, toggleEdit, updateField, getPendingChanges } = useEditStore()
 
 const isCurrentNodeEditing = computed(() => currentEditingId.value === props.id)
-computed(() => getPendingChanges());
-function handleEdit() {
+const editingData = computed(() => getPendingChanges())
+
+const {saveChanges} = useEditStore()
+
+import NoteService from '../services/NoteService.ts'
+import {useZoom} from "@/utils/useZoom.ts";
+import {useNoteStore} from "@/stores/useNoteStore.ts";
+
+const { pbNotes } = useNoteStore()
+const { fitView } = useVueFlow()
+const { zoomToNote } = useZoom(pbNotes, fitView)
+
+const noteService = new NoteService()
+
+async function handleEdit() {
+  zoomToNote(props.id)
+  if (isCurrentNodeEditing.value) {
+    const updatedData: Note = {
+      id: Number(props.id),
+      title: editingData.value?.title ?? props.data.title,
+      content: editingData.value?.content ?? props.data.content,
+      author: editingData.value?.author ?? props.data.author,
+      xPosition: props.position.x,
+      yPosition: props.position.y,
+      width: 100,
+      height: 100,
+      color: props.data.color ?? '#fff',
+      creationDate: props.data.creationDate, // ✅ Pflichtfeld
+      terminationDate: props.data.terminationDate, // optional, aber mitgeben schadet nicht
+    }
+
+    await saveChanges(noteService, updatedData)
+  } else {
     toggleEdit(props.id, props.data)
+  }
 }
 
 function handleInputChange(field: 'title' | 'content' | 'author', event: Event) {
@@ -54,7 +87,7 @@ function onDelete() {
         <input
             type="text"
             class="form-control mr-1"
-            :value="props.data.title"
+            :value="editingData?.title"
             @input="event => handleInputChange('title', event)"
         >
         <div class="card-actions">
@@ -66,14 +99,14 @@ function onDelete() {
         <blockquote class="blockquote mb-0">
           <textarea
               class="form-control"
-              :value="props.data.content"
+              :value="editingData?.content"
               @input="event => handleInputChange('content', event)"
           ></textarea>
           <footer class="blockquote-footer edit-author-input">
             <input
                 type="text"
                 class="form-control mr-1 edit-author-text"
-                :value="props.data.author"
+                :value="editingData?.author"
                 @input="event => handleInputChange('author', event)"
             >
             <span class="ml-2">{{ props.data.creationDate }}</span>
