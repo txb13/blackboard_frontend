@@ -23,8 +23,6 @@ jobs:
       - name: Install dependencies
         run: npm install
       
-      - name: Explicitly install rollup native dependency
-        run: npm install @rollup/rollup-linux-x64-gnu --no-save
 
       - name: Run tests
         run: npm run test:unit
