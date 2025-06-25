@@ -1,66 +1,64 @@
 <script setup lang="ts">
-import {useVueFlow} from '@vue-flow/core'
-import type {PbNoteData} from '../types/notes'
+import { useVueFlow } from '@vue-flow/core'
+import type { PbNoteData } from '../types/notes'
 import DeleteButton from "@/components/DeleteButton.vue";
 import EditButton from "@/components/EditButton.vue";
-import {useEdit} from "@/utils/useEdit.ts";
-
-
-import type {NodeProps } from '@vue-flow/core'
-import {ref} from "vue";
+import { useEditStore } from '@/stores/useEditStore'
+import type { NodeProps } from '@vue-flow/core'
+import { computed } from "vue"
 
 const props = defineProps<NodeProps<PbNoteData>>()
-
-const { fitView } = useVueFlow()
-
-const {editNote, sendChanges} = useEdit(props, fitView)
-
 const { removeNodes } = useVueFlow()
+const { currentEditingId, toggleEdit, updateField, getPendingChanges } = useEditStore()
+
+const isCurrentNodeEditing = computed(() => currentEditingId.value === props.id)
+computed(() => getPendingChanges());
+function handleEdit() {
+    toggleEdit(props.id, props.data)
+}
+
+function handleInputChange(field: 'title' | 'content' | 'author', event: Event) {
+    const target = event.target as HTMLInputElement | HTMLTextAreaElement
+    updateField(field, target.value)
+}
 
 function onDelete() {
-  removeNodes([props.id])
+    removeNodes([props.id])
 }
 
-const isEditing = ref(false);
-
-function onEdit() {
-  isEditing.value = !isEditing.value;
-  if (!isEditing.value) {
-    editNote()
-  }
-  else {
-    sendChanges()
-  }
-  console.log(isEditing)
-}
 
 </script>
 
 <template>
   <img src="../assets/pin.svg"  alt="pin" class="pin"/>
   <div class="custom-node shadow-lg">
-    <div class="card " v-if="!isEditing">
+    <div class="card " v-if="!isCurrentNodeEditing">
       <div class="card-header">
         <span class="mr-5">{{ props.id }}: {{ props.data.title }}</span>
         <div class="card-actions">
-          <EditButton :onEdit="onEdit" />
+          <EditButton :onEdit="handleEdit" />
           <DeleteButton :on-delete="onDelete" />
         </div>
       </div>
       <div class="card-body">
         <blockquote class="blockquote mb-0">
           <p>{{ props.data.content }}</p>
-          <footer class="blockquote-footer">{{ props.data.author }}   <span class="title"> {{ props.data.creationDate }}</span></footer>
+          <footer class="blockquote-footer">{{ props.data.author }}   <span class="author"> {{ props.data.creationDate }}</span></footer>
           <p>gültig bis: <span id="text"> {{props.data.terminationDate}}</span></p>
         </blockquote>
       </div>
     </div>
-    <div class="card " v-if="isEditing">
+    <div class="card " v-if="isCurrentNodeEditing">
       <div class="card-header">
           <span class="mr-2">{{ props.id }}:</span>
-        <input type="text" class="form-control mr-1" :value="props.data.title">
+        <input
+            type="text"
+            class="form-control mr-1"
+            :value="props.data.title"
+            @input="event => handleInputChange('title', event)"
+        >
         <div class="card-actions">
-          <EditButton :onEdit="onEdit" />
+          <EditButton :onEdit="handleEdit" />
           <DeleteButton :on-delete="onDelete" />
         </div>
       </div>
@@ -69,9 +67,15 @@ function onEdit() {
           <textarea
               class="form-control"
               :value="props.data.content"
+              @input="event => handleInputChange('content', event)"
           ></textarea>
           <footer class="blockquote-footer edit-author-input">
-            <input type="text" class="form-control mr-1 edit-author-text" :value="props.data.author">
+            <input
+                type="text"
+                class="form-control mr-1 edit-author-text"
+                :value="props.data.author"
+                @input="event => handleInputChange('author', event)"
+            >
             <span class="ml-2">{{ props.data.creationDate }}</span>
           </footer>
           <p>gültig bis: <span id="text"> {{props.data.terminationDate}}</span></p>

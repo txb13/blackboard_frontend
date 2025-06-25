@@ -6,6 +6,7 @@ export function useZoom(pbNotes: Ref<PbNote[]>, fitView: FitView) {
     const currentNodeIndex = ref(-1)
 
     function zoomToNote(target: string) {
+        console.log("Zooming to Note:", target)
         fitView({
             nodes: [target],
             duration: 1000,
