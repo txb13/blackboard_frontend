@@ -1,5 +1,4 @@
 import axios from 'axios'
-// import type {AxiosResponse} from 'axios'
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_BASE_URL;
 
@@ -17,7 +16,6 @@ export interface Note {
     height: number;
 }
 export default class NoteService {
-
     getNotes(): Promise<Note[]> {
         console.log("GET notes from backend:", BACKEND_URL);
         return axios

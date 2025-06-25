@@ -1,0 +1,30 @@
+name: JavaScript CI with npm
+
+on: [ push ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Use node 20.9.0
+        uses: actions/setup-node@v2
+        with:
+          node-version: 20.9.0
+
+      - name: Clear npm cache
+        run: npm cache clean --force
+      
+      - name: Remove node_modules and lock file if present
+        run: |
+          rm -rf node_modules package-lock.json || true
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Explicitly install rollup native dependency
+        run: npm install @rollup/rollup-linux-x64-gnu --no-save
+
+      - name: Run tests
+        run: npm run test:unit

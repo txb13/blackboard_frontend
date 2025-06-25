@@ -6,12 +6,13 @@
 /* this contains the default theme, these are optional styles */
 @import '@vue-flow/core/dist/theme-default.css';
 
-
-.canvas  { height: 52vh; border: 1px solid #ddd; margin-top: 1rem; }
-.board   { height: 100%; }
 textarea { width: 100%; }
 
 .draggable-note { cursor: grab; }
 .draggable-note:active { cursor: grabbing; }
 
 body{background-color: aliceblue}
+
+.bi {
+    font-size: 1.2rem;
+}
