@@ -69,7 +69,6 @@ watch(localContent, (val) => emit('update:contentField', val))
 
 function handleSubmit() {
   emit('addNote')
-  selectedColor.value = ''
 
 }
 </script>
