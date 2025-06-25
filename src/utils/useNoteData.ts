@@ -1,9 +1,11 @@
 import NoteService, {type Note} from "@/services/NoteService";
 import {type Ref, ref} from "vue";
 import type { PbNote } from '@/types/notes'
-import type {FitView} from "@vue-flow/core";
+import {type FitView, useVueFlow} from "@vue-flow/core";
 
 import {useZoom} from "@/utils/useZoom.ts";
+
+const { setNodes } = useVueFlow()
 
 export function useNoteData(noteService: NoteService, pbNotes: Ref<PbNote[]>, fitView: FitView) {
     const { zoomToNote } = useZoom(pbNotes, fitView)
@@ -55,6 +57,7 @@ export function useNoteData(noteService: NoteService, pbNotes: Ref<PbNote[]>, fi
                 terminationDate: note.terminationDate
             },
         }))
+        setNodes(pbNotes.value)
         await fitView({duration: 500})
     }
 

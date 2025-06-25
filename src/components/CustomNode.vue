@@ -1,40 +1,116 @@
 <script setup lang="ts">
-import type {NodeProps } from '@vue-flow/core'
-import {useVueFlow} from '@vue-flow/core'
+import { useVueFlow } from '@vue-flow/core'
 import type { PbNoteData } from '../types/notes'
+import DeleteButton from "@/components/DeleteButton.vue";
+import EditButton from "@/components/EditButton.vue";
+import { useEditStore } from '@/stores/useEditStore'
+import type { NodeProps } from '@vue-flow/core'
+import { computed } from "vue"
+import type {Note} from "../services/NoteService.ts";
 
 const props = defineProps<NodeProps<PbNoteData>>()
-
 const { removeNodes } = useVueFlow()
+const { currentEditingId, toggleEdit, updateField, getPendingChanges } = useEditStore()
+
+const isCurrentNodeEditing = computed(() => currentEditingId.value === props.id)
+const editingData = computed(() => getPendingChanges())
+
+const {saveChanges} = useEditStore()
+
+import NoteService from '../services/NoteService.ts'
+import {useZoom} from "@/utils/useZoom.ts";
+import {useNoteStore} from "@/stores/useNoteStore.ts";
+
+const { pbNotes } = useNoteStore()
+const { fitView } = useVueFlow()
+const { zoomToNote } = useZoom(pbNotes, fitView)
+
+const noteService = new NoteService()
+
+async function handleEdit() {
+  zoomToNote(props.id)
+  if (isCurrentNodeEditing.value) {
+    const updatedData: Note = {
+      id: Number(props.id),
+      title: editingData.value?.title ?? props.data.title,
+      content: editingData.value?.content ?? props.data.content,
+      author: editingData.value?.author ?? props.data.author,
+      xPosition: props.position.x,
+      yPosition: props.position.y,
+      width: 100,
+      height: 100,
+      color: props.data.color ?? '#fff',
+      creationDate: props.data.creationDate, // ✅ Pflichtfeld
+      terminationDate: props.data.terminationDate, // optional, aber mitgeben schadet nicht
+    }
+
+    await saveChanges(noteService, updatedData)
+  } else {
+    toggleEdit(props.id, props.data)
+  }
+}
+
+function handleInputChange(field: 'title' | 'content' | 'author', event: Event) {
+    const target = event.target as HTMLInputElement | HTMLTextAreaElement
+    updateField(field, target.value)
+}
 
 function onDelete() {
-  removeNodes([props.id])
+    removeNodes([props.id])
 }
+
 
 </script>
 
 <template>
-<!--
-  TODO: finish layout of CustomNode:
-    - it needs to feature all attributes
-    - width and height need to get dimensions from note
-    - color needs to adjust
-    - showcase if a note is terminated (for example grey it out)
--->
-
   <img src="../assets/pin.svg"  alt="pin" class="pin"/>
   <div class="custom-node shadow-lg">
-    <div class="card ">
+    <div class="card " v-if="!isCurrentNodeEditing">
       <div class="card-header">
-       <span> {{ props.id }}_{{ props.data.title }}</span>
-          <button class="delete-btn bi bi-trash3-fill" data-tooltip="Notiz löschen" @click="onDelete">
-          </button>
+        <span class="mr-5">{{ props.id }}: {{ props.data.title }}</span>
+        <div class="card-actions">
+          <EditButton :onEdit="handleEdit" icon="bi-pencil-fill" data-tooltip="Notiz bearbeiten"/>
+          <DeleteButton :on-delete="onDelete" />
+        </div>
       </div>
-
       <div class="card-body">
         <blockquote class="blockquote mb-0">
           <p>{{ props.data.content }}</p>
-          <footer class="blockquote-footer">{{ props.data.author }}   <span class="title"> {{ props.data.creationDate }}</span></footer>
+          <footer class="blockquote-footer">{{ props.data.author }}   <span class="author"> {{ props.data.creationDate }}</span></footer>
+          <p>gültig bis: <span id="text"> {{props.data.terminationDate}}</span></p>
+        </blockquote>
+      </div>
+    </div>
+    <div class="card " v-if="isCurrentNodeEditing">
+      <div class="card-header">
+          <span class="mr-2">{{ props.id }}:</span>
+        <input
+            type="text"
+            class="form-control mr-1"
+            :value="editingData?.title"
+            @input="event => handleInputChange('title', event)"
+        >
+        <div class="card-actions">
+          <EditButton :onEdit="handleEdit" icon="bi-check-circle" data-tooltip="Änderungen speichern"/>
+          <DeleteButton :on-delete="onDelete" />
+        </div>
+      </div>
+      <div class="card-body">
+        <blockquote class="blockquote mb-0">
+          <textarea
+              class="form-control"
+              :value="editingData?.content"
+              @input="event => handleInputChange('content', event)"
+          ></textarea>
+          <footer class="blockquote-footer edit-author-input">
+            <input
+                type="text"
+                class="form-control mr-1 edit-author-text"
+                :value="editingData?.author"
+                @input="event => handleInputChange('author', event)"
+            >
+            <span class="ml-2">{{ props.data.creationDate }}</span>
+          </footer>
           <p>gültig bis: <span id="text"> {{props.data.terminationDate}}</span></p>
         </blockquote>
       </div>
@@ -57,15 +133,26 @@ function onDelete() {
   justify-content: space-between;
   align-items: center;
   padding: 7px;
+  word-wrap: break-word;
 }
 
 .card-body{
   padding: 10px;
 }
 
+.card {
+  min-width: 300px;
+  max-width: 450px;
+  font-family: 'Gloria Hallelujah', cursive;
+}
+
 .blockquote{
   font-size: 1rem;
   font-family: 'Gloria Hallelujah', cursive;
+}
+
+.form-control{
+  padding: 0 10px;
 }
 
 .custom-node {
@@ -88,29 +175,23 @@ function onDelete() {
   color: crimson;
 }
 
-.delete-btn {
-  background-color: transparent;
-  border: none;
+.card-actions {
   margin-left: auto;
+  display: flex;
 }
 
-.delete-btn[data-tooltip] {
-  position: relative;
-  z-index: 1000;
+.edit-author-input {
+  margin-top: 10px;
+  display: flex;
 }
 
-.delete-btn[data-tooltip]:hover::after {
-  content: attr(data-tooltip);
-  position: absolute; /* changed from relative to absolute */
-  left: 100%;
-  bottom: -50%;
-  padding: 5px 10px;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
-  border-radius: 4px;
-  font-size: 12px;
-  white-space: nowrap;
-  z-index: 1000;
-  pointer-events: none;
+.edit-author-text {
+  font-size: .875em;
+  color: #6c757d;
 }
+
+* {
+  word-wrap: break-word;
+}
+
 </style>

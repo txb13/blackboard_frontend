@@ -1,42 +1,36 @@
 <script setup lang="ts">
-
-/**    TODO: change notes to have our custom design and attributes (see: CustomNode '../components/CustomNode.vue')
- import CustomNode from '../components/CustomNode.vue'
- **/
-import {ref} from 'vue'
-import {useVueFlow, VueFlow} from '@vue-flow/core'
-import {Background} from '@vue-flow/background'
+import { useVueFlow, VueFlow } from '@vue-flow/core'
+import { Background } from '@vue-flow/background'
 import NoteService from '../services/NoteService.ts'
 import CustomNode from '../components/CustomNode.vue'
-import type {PbNote} from '../types/notes'
+import ZoomControls from "@/components/ZoomControls.vue"
+import NoteForm from "@/components/NoteForm.vue"
+import RefreshButton from "@/components/RefreshButton.vue"
+import { useNodeChangeHandler } from "@/utils/useChangeHandler.ts"
+import { useNoteData } from "@/utils/useNoteData.ts"
+import { useEditStore } from '@/stores/useEditStore'
+import { useNoteStore } from '@/stores/useNoteStore'
+import { useZoom } from "@/utils/useZoom.ts"
+import { onMounted } from 'vue'
 
-import ZoomControls from "@/components/ZoomControls.vue";
-import {useZoom} from "@/utils/useZoom.ts";
-import NoteForm from "@/components/NoteForm.vue";
-import RefreshButton from "@/components/RefreshButton.vue";
-
-import {useNodeChangeHandler} from "@/utils/useChangeHandler.ts";
-import {useNoteData} from "@/utils/useNoteData.ts";
-
-
-const pbNotes = ref<PbNote[]>([])
+const { isEditing } = useEditStore()
+const { pbNotes, refresh } = useNoteStore()
 const { fitView } = useVueFlow()
-const {zoomToNextNote, zoomToPrevNote} = useZoom(pbNotes, fitView)
+const { zoomToNextNote, zoomToPrevNote } = useZoom(pbNotes, fitView)
 
 const noteService = new NoteService()
-
-const {getNotes, addNote, refresh, titleField, authorField, contentField} = useNoteData(noteService, pbNotes, fitView)
+const { getNotes, addNote, titleField, authorField, contentField } = useNoteData(noteService, pbNotes, fitView)
 
 const nodeTypes = {
   custom: CustomNode,
-  // special: SpecialNode,
 }
 
+onMounted(async () => {
+  await getNotes()
+  await refresh()
+})
+
 useNodeChangeHandler({ pbNotes, noteService })
-getNotes()
-refresh()
-
-
 
 </script>
 
@@ -46,7 +40,6 @@ refresh()
       v-model:authorField="authorField"
       v-model:contentField="contentField"
       @addNote="addNote"
-
   />
   <div class="container lg:container pb-0">
     <div class="canvas shadow-lg mb-0 bg-body rounded position-relative">
@@ -56,9 +49,9 @@ refresh()
           class="board"
           :nodes="pbNotes"
           :node-types="nodeTypes"
-          :pan-on-drag="true"
+          :pan-on-drag="!isEditing"
           :pan-on-scroll="true"
-          :nodes-draggable="true"
+          :nodes-draggable="!isEditing"
           :nodes-connectable="false"
           :auto-pan-on-node-drag="false"
           :min-zoom="0.1"
@@ -68,12 +61,13 @@ refresh()
             pattern-color="#c0c0c0"
             />
       </VueFlow>
-    <div class="position-absolute start-0 bottom-0 z-2" id="note-count" v-if="pbNotes.length!==0">
-      Notizen: {{pbNotes.length}}
-    </div>
-    <div class="position-absolute start-0 bottom-0 z-2" id="note-count" v-if="pbNotes.length===0">
+    <div class="position-absolute start-0 bottom-0 z-2" v-if="pbNotes.length===0">
       keine Notizen vorhanden
     </div>
+    <div class="position-absolute start-0 bottom-0 z-2" id="note-count" v-else>
+      Notizen: {{pbNotes.length}}
+    </div>
+
   </div>
 </div>
 </template>

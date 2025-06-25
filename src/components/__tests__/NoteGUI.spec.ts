@@ -1,12 +1,30 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, flushPromises } from '@vue/test-utils'
+import { ref } from 'vue'
 import NoteGUI from '@/components/NoteGUI.vue'
 import type { Note } from '@/services/NoteService'
 
-// Define an emptyResponse mock for the notes
+// Leeres notes-Array als Mock-Daten
 const emptyResponse: Note[] = []
 
-// Mock all required dependencies
+// Definiere mockPbNotes als ref, damit es reaktiv ist
+const mockPbNotes = ref([])
+
+// Mock Pinia-Stores
+vi.mock('@/stores/useNoteStore', () => ({
+    useNoteStore: () => ({
+        pbNotes: mockPbNotes,
+        refresh: vi.fn()
+    })
+}))
+
+vi.mock('@/stores/useEditStore', () => ({
+    useEditStore: () => ({
+        isEditing: false
+    })
+}))
+
+// Mock NoteService, wie gehabt
 vi.mock('@/services/NoteService', () => ({
     default: vi.fn().mockImplementation(() => ({
         getNotes: vi.fn().mockResolvedValue(emptyResponse)
@@ -46,7 +64,7 @@ vi.mock('@/utils/useChangeHandler', () => ({
     useNodeChangeHandler: vi.fn()
 }))
 
-// Mock child components
+// Mock Child-Komponenten
 vi.mock('@/components/ZoomControls.vue', () => ({
     default: {
         name: 'ZoomControls',
@@ -79,8 +97,10 @@ describe('NoteGUI', () => {
     let wrapper: ReturnType<typeof shallowMount>
 
     beforeEach(async () => {
+        // Sicherstellen, dass pbNotes leer ist
+        mockPbNotes.value = []
         wrapper = shallowMount(NoteGUI)
-        await wrapper.vm.$nextTick()
+        await flushPromises() // auf asynchrone onMounted-Calls warten
     })
 
     it('should render empty state message when no notes exist', () => {
