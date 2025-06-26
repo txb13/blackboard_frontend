@@ -1,7 +1,6 @@
 <template>
   <button
       :class="['edit-btn bi', icon]"
-      :data-tooltip="tooltip"
       @click="onEdit"
   />
 </template>
