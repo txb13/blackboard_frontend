@@ -41,8 +41,8 @@ useNodeChangeHandler({ pbNotes, noteService })
       v-model:contentField="contentField"
       @addNote="addNote"
   />
-  <div class="container lg:container pb-0">
-    <div class="canvas shadow-lg mb-0 bg-body rounded position-relative">
+  <div class="container lg:container">
+    <div class="canvas shadow-lg bg-body rounded position-relative">
       <ZoomControls :on-next="zoomToNextNote" :on-prev="zoomToPrevNote" />
       <RefreshButton :refresh="refresh"></RefreshButton>
       <VueFlow
@@ -85,11 +85,9 @@ h2{
   width: 100%;
   border: 1px solid #ddd;
   margin-top: 1rem;
+  margin-bottom: 1rem;
   background-image: url('../assets/backgroundPinnboard.png');
 }
-
-
-
 #note-count {
   font-size: 1.2rem;
   color: black;

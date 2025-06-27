@@ -1,7 +1,7 @@
 <template>
   <div class="container lg:container pb-0">
     <h2>Erstelle Notizen auf dem digitalen Blackboard</h2>
-    <button class="btn btn-outline-warning" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+    <button class="btn btn-outline-warning mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
       &gt;&gt; Neue Notiz erstellen &lt;&lt;
     </button>
     <div class="collapse" id="collapseExample">
@@ -39,8 +39,6 @@
 import { ref, watch } from 'vue'
 
 
-
-const selectedColor = ref('')
 const props = defineProps<{
   titleField: string
   authorField: string

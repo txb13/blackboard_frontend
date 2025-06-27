@@ -67,16 +67,16 @@ function onDelete() {
   <div class="custom-node shadow-lg">
     <div class="card " v-if="!isCurrentNodeEditing">
       <div class="card-header">
-        <span class="mr-5">{{ props.id }}: {{ props.data.title }}</span>
+        <span class="mr-5">{{ props.data.title }}</span>
         <div class="card-actions">
           <EditButton :onEdit="handleEdit" icon="bi-pencil-fill" data-tooltip="Notiz bearbeiten"/>
           <DeleteButton :on-delete="onDelete" />
         </div>
       </div>
-      <div class="card-body">
-        <blockquote class="blockquote mb-0">
-          <p>{{ props.data.content }}</p>
-          <footer class="blockquote-footer">{{ props.data.author }}   <span class="author"> {{ props.data.creationDate }}</span></footer>
+      <div class="card-body p-4">
+        <blockquote class="blockquote ">
+          <h6>{{ props.data.content }}</h6>
+          <footer class="blockquote-footer mt-2 mb-1">{{ props.data.author }}   <p class="author"> {{ props.data.creationDate }}</p></footer>
           <p>gültig bis: <span id="text"> {{props.data.terminationDate}}</span></p>
         </blockquote>
       </div>
@@ -111,7 +111,7 @@ function onDelete() {
             >
             <span class="ml-2">{{ props.data.creationDate }}</span>
           </footer>
-          <p>gültig bis: <span id="text"> {{props.data.terminationDate}}</span></p>
+          <p id="text2">gültig bis: <span id="text"> {{props.data.terminationDate}}</span></p>
         </blockquote>
       </div>
     </div>
@@ -173,7 +173,12 @@ function onDelete() {
 
 #text{
   color: crimson;
+  font-size: 0.8rem;
 }
+p{
+  font-size: 0.8rem;
+}
+
 
 .card-actions {
   margin-left: auto;
