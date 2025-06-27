@@ -1,44 +1,3 @@
-<template>
-  <NoteForm
-      v-model:titleField="titleField"
-      v-model:authorField="authorField"
-      v-model:contentField="contentField"
-      @addNote="handleAddNote"
-      :noteService="noteService"
-      :pbNotes="pbNotes"
-      :fitView="fitView"
-  />
-  <div class="container lg:container">
-    <div class="canvas shadow-lg bg-body rounded position-relative">
-      <ZoomControls :on-next="zoomToNextNote" :on-prev="zoomToPrevNote" />
-      <RefreshButton :refresh="refresh"></RefreshButton>
-      <VueFlow
-          class="board"
-          :nodes="pbNotes"
-          :node-types="nodeTypes"
-          :pan-on-drag="!isEditing"
-          :pan-on-scroll="true"
-          :nodes-draggable="!isEditing"
-          :nodes-connectable="false"
-          :auto-pan-on-node-drag="false"
-          :min-zoom="0.1"
-      >
-        <Background
-            :gap="16"
-            pattern-color="#c0c0c0"
-            />
-      </VueFlow>
-    <div class="position-absolute start-0 bottom-0 z-2" v-if="pbNotes.length===0">
-      keine Notizen vorhanden
-    </div>
-    <div class="position-absolute start-0 bottom-0 z-2" id="note-count" v-else>
-      Notizen: {{pbNotes.length}}
-    </div>
-
-  </div>
-</div>
-</template>
-
 <script setup lang="ts">
 import { useVueFlow, VueFlow } from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
@@ -73,10 +32,45 @@ onMounted(async () => {
 
 useNodeChangeHandler({ pbNotes, noteService })
 
-function handleAddNote(color: string) {
-  addNote(color)
-}
 </script>
+
+<template>
+  <NoteForm
+      v-model:titleField="titleField"
+      v-model:authorField="authorField"
+      v-model:contentField="contentField"
+      @addNote="addNote"
+  />
+  <div class="container lg:container">
+    <div class="canvas shadow-lg bg-body rounded position-relative">
+      <ZoomControls :on-next="zoomToNextNote" :on-prev="zoomToPrevNote" />
+      <RefreshButton :refresh="refresh"></RefreshButton>
+      <VueFlow
+          class="board"
+          :nodes="pbNotes"
+          :node-types="nodeTypes"
+          :pan-on-drag="!isEditing"
+          :pan-on-scroll="true"
+          :nodes-draggable="!isEditing"
+          :nodes-connectable="false"
+          :auto-pan-on-node-drag="false"
+          :min-zoom="0.1"
+      >
+        <Background
+            :gap="16"
+            pattern-color="#c0c0c0"
+            />
+      </VueFlow>
+    <div class="position-absolute start-0 bottom-0 z-2" v-if="pbNotes.length===0">
+      keine Notizen vorhanden
+    </div>
+    <div class="position-absolute start-0 bottom-0 z-2" id="note-count" v-else>
+      Notizen: {{pbNotes.length}}
+    </div>
+
+  </div>
+</div>
+</template>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap');

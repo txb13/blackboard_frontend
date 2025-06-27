@@ -61,9 +61,9 @@ export function useNoteData(noteService: NoteService, pbNotes: Ref<PbNote[]>, fi
         await fitView({duration: 500})
     }
 
-    async function addNote(color?: string) {
+    async function addNote() {
         if (!contentField.value.trim()) return
-        const noteColor = color || pickColor()  // Verwendet die übergebene Farbe oder pickColor
+        const noteColor =  pickColor()
         await refresh()
         await noteService.addNote({
             id: undefined,
@@ -82,6 +82,7 @@ export function useNoteData(noteService: NoteService, pbNotes: Ref<PbNote[]>, fi
         setTimeout(() => {
             zoomToNote(String(pbNotes.value.length - 1))
         }, 50)
+        // contentField.value = ''
     }
 
     return {
@@ -91,6 +92,5 @@ export function useNoteData(noteService: NoteService, pbNotes: Ref<PbNote[]>, fi
         titleField,
         authorField,
         contentField,
-        pickColor  // Exportiere pickColor
     }
 }
