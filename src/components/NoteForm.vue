@@ -26,7 +26,8 @@
           <div class="form-group">
             <label for="Farbe auswählen"> Farbe auswählen</label>
             <input type="color" class="form-control form-control-color"
-                   id="Farbe auswählen" title="Farbe auswählen" />
+                   id="Farbe auswählen" title="Farbe auswählen" v-model="selectedColor"
+            />
           </div>
           <button type="submit" class="btn btn-outline-warning">Notiz hinzufügen</button>
         </form>
@@ -38,6 +39,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 
+const selectedColor = ref('')
 
 const props = defineProps<{
   titleField: string
@@ -52,7 +54,7 @@ const emit = defineEmits<{
   (e: 'update:titleField', value: string): void
   (e: 'update:authorField', value: string): void
   (e: 'update:contentField', value: string): void
-  (e: 'addNote'): void
+  (e: 'addNote', color: string): void  // Änderung hier
 }>()
 
 // Create local refs to bind to v-model
@@ -66,7 +68,7 @@ watch(localAuthor, (val) => emit('update:authorField', val))
 watch(localContent, (val) => emit('update:contentField', val))
 
 function handleSubmit() {
-  emit('addNote')
+  emit('addNote', selectedColor.value)
 
 }
 </script>
