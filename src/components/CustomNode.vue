@@ -122,10 +122,6 @@ function onDelete() {
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&family=Protest+Guerrilla&family=Rubik+Iso&display=swap');
-/*
-  TODO: finish style and move it to main.css
-*/
-
 .card-header{
   font-family: 'Gloria Hallelujah', cursive;
   font-size: 1.3rem;
@@ -175,21 +171,16 @@ function onDelete() {
   color: crimson;
   font-size: 0.8rem;
 }
-p{
-  font-size: 0.8rem;
-}
-
+p{font-size: 0.8rem;}
 
 .card-actions {
   margin-left: auto;
   display: flex;
 }
-
 .edit-author-input {
   margin-top: 10px;
   display: flex;
 }
-
 .edit-author-text {
   font-size: .875em;
   color: #6c757d;

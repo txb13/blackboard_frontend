@@ -63,11 +63,11 @@ export function useNoteData(noteService: NoteService, pbNotes: Ref<PbNote[]>, fi
 
     async function addNote(color?: string) {
         if (!contentField.value.trim()) return
-        const noteColor = color || pickColor()  // Verwendet die übergebene Farbe oder pickColor
+        const noteColor = color || pickColor()
         await refresh()
         await noteService.addNote({
             id: undefined,
-            title: titleField.value.trim(),
+            title: titleField.value.trim().toUpperCase(),
             content: contentField.value.trim(),
             author: authorField.value.trim(),
             color: noteColor,
@@ -91,6 +91,5 @@ export function useNoteData(noteService: NoteService, pbNotes: Ref<PbNote[]>, fi
         titleField,
         authorField,
         contentField,
-        pickColor
-    }
+       }
 }

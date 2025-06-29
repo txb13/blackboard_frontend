@@ -1,5 +1,5 @@
 <template>
-  <div class="position-absolute top-0 z-2 d-flex align-items-center gap-2">
+  <div class="container position-absolute top-0 z-2 d-flex align-items-center gap-2">
     <button class="zoom-btn bi bi-arrow-left-square" @click="onPrev"></button>
     <span id="zoom">Zoom</span>
     <button class="zoom-btn bi bi-arrow-right-square" @click="onNext"></button>
@@ -18,6 +18,7 @@ defineProps<{
   background-color: transparent;
   border: none;
   padding: 10px;
+  color: black;
 }
 
 #zoom {
@@ -25,4 +26,5 @@ defineProps<{
   color: black;
   user-select: none;
 }
+
 </style>

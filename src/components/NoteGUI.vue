@@ -89,7 +89,6 @@ h2{
 .canvas  {
   height: 70vh;
   width: 100%;
-  border: 1px solid #ddd;
   margin-top: 1rem;
   margin-bottom: 1rem;
   background-image: url('../assets/backgroundPinnboard.png');

@@ -2,7 +2,7 @@
   <div class="container lg:container pb-0">
     <h2>Erstelle Notizen auf dem digitalen Blackboard</h2>
     <button class="btn btn-outline-warning mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-      &gt;&gt; Neue Notiz erstellen &lt;&lt;
+      Neue Notiz erstellen
     </button>
     <div class="collapse" id="collapseExample">
       <div class="card card-body">
@@ -28,13 +28,17 @@
             <input type="color" class="form-control form-control-color"
                    id="Farbe auswählen" title="Farbe auswählen" v-model="selectedColor" />
           </div>
-          <button type="submit" class="btn btn-outline-warning">Notiz hinzufügen</button>
+          <button type="submit" class="btn btn-outline-warning">Hinzufügen</button>
         </form>
       </div>
     </div>
   </div>
 </template>
 
+<style scoped>
+
+
+</style>
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 
@@ -56,12 +60,11 @@ const emit = defineEmits<{
   (e: 'addNote', color: string): void  // Änderung hier
 }>()
 
-// Create local refs to bind to v-model
+
 const localTitle = ref(props.titleField)
 const localAuthor = ref(props.authorField)
 const localContent = ref(props.contentField)
 
-// Sync local changes back to parent
 watch(localTitle, (val) => emit('update:titleField', val))
 watch(localAuthor, (val) => emit('update:authorField', val))
 watch(localContent, (val) => emit('update:contentField', val))

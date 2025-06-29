@@ -16,5 +16,6 @@ defineProps<{
   background-color: transparent;
   border: none;
   padding: 10px;
+  font-size: 25px;
 }
 </style>
